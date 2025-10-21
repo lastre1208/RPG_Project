@@ -10,7 +10,7 @@ public class SelectTarget : MonoBehaviour
     public TMP_Text targetText; //ターゲット選択テキスト
     public CommandSelect command;
     public CanvasGroup commandUI;
-    EnemyStatus targetEnemy;
+    Enemy targetEnemy;
     int targetIndex;
     private void Start()
     {
@@ -22,14 +22,15 @@ public class SelectTarget : MonoBehaviour
         if (targetPanel.activeSelf)
         {
 
-            targetText.text = targetEnemy.status.characterName;
+            targetText.text = targetEnemy.status.status.characterName;
         }
     }
     public void TargetStart()//ターゲット選択開始
     {
         targetPanel.SetActive(true);
-        targetEnemy = command.manager.enemies.First();
+       
         commandUI.interactable = false;
+       targetEnemy=command.manager.enemies.First();
         targetIndex = 0;
     }
 
@@ -37,13 +38,41 @@ public class SelectTarget : MonoBehaviour
     {
         if (!targetPanel.activeSelf) return;
 
-        targetIndex=(targetIndex+1)%command.manager.enemies.Count;
-        targetEnemy=command.manager.enemies[targetIndex];
+        int count=command.manager.enemies.Count;
+
+        for(int i=0; i< count; i++)
+        {
+            targetIndex = (targetIndex + 1) % count;
+            var enemy=command.manager.enemies[targetIndex];
+
+            //if (!enemy.status.status.IsDead())
+            //{
+            //    targetEnemy = enemy;
+            //    break;
+            //}
+        } 
+
+        
        
     }
     public void TargetPrevious()//ターゲットの切り替え
     {
         if (!targetPanel.activeSelf) return;
+        int count = command.manager.enemies.Count;
+
+        for(int i = 0; i < count; i++)
+        {
+
+            targetIndex=(targetIndex - 1+count) % count;
+            var enemy = command.manager.enemies[targetIndex];
+
+            //if (!enemy.status.status.IsDead())
+            //{
+            //    targetEnemy= enemy;
+            //    break;
+
+            //}
+        }
 
         targetIndex = (targetIndex - 1+command.manager.enemies.Count) % command.manager.enemies.Count;
         targetEnemy = command.manager.enemies[targetIndex];
@@ -65,6 +94,7 @@ public class SelectTarget : MonoBehaviour
         Debug.Log("ターゲット選択完了");
         command.Target=targetEnemy;
         command.PlayAction();
+        commandUI.interactable=true;
     }
 
     public void EndSelect()

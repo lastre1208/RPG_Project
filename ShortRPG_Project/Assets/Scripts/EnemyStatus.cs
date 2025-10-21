@@ -15,5 +15,5 @@ public class EnemyStatus : ScriptableObject
    public CommonStatus status;
     public int ID;
     public int exp;
-    public HowIntelligent wisdam;
+   
 }

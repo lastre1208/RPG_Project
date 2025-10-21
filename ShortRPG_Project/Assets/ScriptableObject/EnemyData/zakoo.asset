@@ -13,18 +13,16 @@ MonoBehaviour:
   m_Name: zakoo
   m_EditorClassIdentifier: 
   status:
-    characterName: zakko
+    characterImage: {fileID: -1111021167199550667, guid: d745cbf569e1d6247b13d393f131ebcb, type: 3}
+    characterName: enemy
     maxHP: 199
     currentHP: 199
     maxMP: 0
     currentMP: 0
     attackPower: 0
     defensePower: 0
-    speed: 0
-    isDefending: 0
     damageRatio: 1
     skillData:
     - {fileID: 11400000, guid: a084cafde9587e24592227bf057c5ffa, type: 2}
   ID: 0
   exp: 0
-  wisdam: 0

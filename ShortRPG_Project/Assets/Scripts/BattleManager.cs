@@ -16,8 +16,9 @@ public class BattleManager : MonoBehaviour//戦闘の一連の流れを管理するクラス
     public BattleState state=BattleState.START;
     public UIManager manager;
 
-    public List<EnemyStatus> enemies = new List<EnemyStatus>();//敵のステータス。エンカウント時に読み込む。
+    public List<Enemy> enemies = new List<Enemy>();//敵のステータス。エンカウント時に読み込む。
     public PlayerStatus player;//プレイヤーのステータス。
+  
     private void Update()
     {
         switch (state)
@@ -59,10 +60,15 @@ public class BattleManager : MonoBehaviour//戦闘の一連の流れを管理するクラス
     public void StartBatlle()
     {
         Debug.Log("戦闘開始");
-       
-            Debug.Log( "があらわれた！");
+        foreach (Enemy enemy in enemies)
+        {
+            Debug.Log(enemy.status.status.characterName + "があらわれた！");
+
+        }
+            
         
         SetTurn(BattleState.PLAYERTURN);
+        Debug.Log("プレイヤーのターン");
         manager.EnableBattleUI();
        
     }
@@ -70,7 +76,7 @@ public class BattleManager : MonoBehaviour//戦闘の一連の流れを管理するクラス
     public void PlayerTurn()
     {
 
-        Debug.Log("プレイヤーのターン");
+      //  Debug.Log("プレイヤーのターン");
        
     }
    
@@ -80,6 +86,7 @@ public class BattleManager : MonoBehaviour//戦闘の一連の流れを管理するクラス
     {
 
         Debug.Log("敵のターン");
+        ExecuteAction();
 
     }
    public void ExecuteAction()//行動実行
@@ -92,11 +99,12 @@ public class BattleManager : MonoBehaviour//戦闘の一連の流れを管理するクラス
         else if(state==BattleState.PLAYERTURN)
         {
             SetTurn(BattleState.ENEMYTURN);
-
+            
         }
         else
         {
             SetTurn(BattleState.PLAYERTURN);
+            Debug.Log("プレイヤーのターン");
         }
     }
 
@@ -112,7 +120,7 @@ public class BattleManager : MonoBehaviour//戦闘の一連の流れを管理するクラス
     }
     public bool CheckBattleEnd()
     {
-        if (player.status.IsDead())
+        if (player.IsDead())
         {
             SetTurn(BattleState.LOST);
             Debug.Log("敗北");
@@ -120,10 +128,10 @@ public class BattleManager : MonoBehaviour//戦闘の一連の流れを管理するクラス
 
         }
          int count = 0;
-        foreach (EnemyStatus status in enemies)
+        foreach (Enemy status in enemies)
         {
            
-            if (status.status.IsDead())//敵が全員死んでたら完了
+            if (status.IsDead())//敵が全員死んでたら完了
             {
                 count++;
 

@@ -19,13 +19,17 @@ public class BattleManager : MonoBehaviour//戦闘の一連の流れを管理するクラス
     public SkillExecuter skill;
     public List<Enemy> enemies = new List<Enemy>();//敵のステータス。エンカウント時に読み込む。
     public PlayerStatus player;//プレイヤーのステータス。
-  
+  public EncountManager encountManager;
+
+    private int Level = 0;
+
     private void Update()
     {
         switch (state)
         {
             case BattleState.START:
                 {
+               
                     StartBatlle();
                     break;
                 }
@@ -55,11 +59,13 @@ public class BattleManager : MonoBehaviour//戦闘の一連の流れを管理するクラス
     }
     public void EncounterEnemy()//戦闘開始時に呼ぶ。
     {
+      enemies= encountManager.EncountEnemy(Level);
         SetTurn(BattleState.START);
     }
 
     public void StartBatlle()
     {
+        EncounterEnemy();
         Debug.Log("戦闘開始");
         foreach (Enemy enemy in enemies)
         {
@@ -92,7 +98,7 @@ public class BattleManager : MonoBehaviour//戦闘の一連の流れを管理するクラス
         {
             if (!enemy.status.status.IsDead())
             {
-                SkillData selectSkill = enemy.SelectSkill(enemy.status);
+                SkillData selectSkill = enemy.SkillAndTarget.SelectSkill(enemy.status);
                 if (selectSkill.isAllTarget)
                 {
                     foreach (Enemy targetenemy in enemies)
@@ -104,7 +110,8 @@ public class BattleManager : MonoBehaviour//戦闘の一連の流れを管理するクラス
                 }
                 else
                 {
-                    skill.ExecuteSkill(selectSkill, enemy.status.status, enemy.SelectTarget(selectSkill));
+                    var target = enemy.SkillAndTarget.SelectTarget(selectSkill, player.status, enemy.status.status);
+                    skill.ExecuteSkill(selectSkill, enemy.status.status, target);
                 }
                    
             }

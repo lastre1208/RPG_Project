@@ -3,7 +3,8 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections.Generic;
-
+using Unity.VisualScripting;
+using System;
 public class DefaultEnemyStatus
 {
     public float defaultDamageRate;
@@ -14,46 +15,35 @@ public class DefaultEnemyStatus
 public class Enemy : MonoBehaviour,ICharacterSet, IBuffEffect
 {
     public EnemyStatus status;
+    public CommonStatus commonStatus;
     public TMP_Text nameText;
     public SpriteRenderer characterImage;
     public TMP_Text damageText;
-
+     
     public float damageRate;
     public float DacayDamage;
     public float easyDecay;
     public float recover;
-
+    public event Action<int> OnDamaged;
     int actionNum = 0;
-    bool isDamage;
-    float countTime;
+ private   bool isDamage;
+    public bool IsDamage
+    {
+        get { return isDamage; }
+       
+    }
+  private  float countTime;
+    public float CountTime
+    {
+        get { return countTime; }
+    }
     DefaultEnemyStatus defaultEnemy = new();
     PlayerStatus player;
-
-   
-    private void Start()
+   PolygonCollider2D polygonCollider;
+ private EnemySelectSkillAndTarget skillAndTarget;
+    public EnemySelectSkillAndTarget SkillAndTarget
     {
-        status.status.Inject(this, this);
- 
-        
-        characterImage=this.GetComponent<SpriteRenderer>();
-        characterImage.sprite = status.status.characterImage;
-        TMP_Text[]TMP_Texts= this.GetComponentsInChildren<TMP_Text>();
-
-        nameText = TMP_Texts[0];
-        nameText.text = status.status.characterName;
-        damageText=TMP_Texts[1];
-
-        
-        status.status.currentHP = status.status.maxHP;
-        status.status.currentSP = status.status.maxSP;
-
-       
-        damageRate=status.takedamageRatio;
-        easyDecay=status.easydecayDamage;
-        DacayDamage =status.decayDamageRatioLimit;
-        recover =status.recoverDamageRatio;
-
-        player = GameObject.FindWithTag("Player").GetComponent<PlayerStatus>();
+        get { return skillAndTarget; }
     }
 
     private void Update()
@@ -65,12 +55,66 @@ public class Enemy : MonoBehaviour,ICharacterSet, IBuffEffect
 
             if(countTime >= 0.5f)
             {
-                damageText.text = "";
+               
                 isDamage = false;
                 countTime = 0f;
             }
         }
     }
+    public void Init(EnemyStatus enemyStatus)
+    {
+        status = enemyStatus;
+        status.status.Inject(this, this);
+        commonStatus = status.status;
+      
+       
+        // 見た目・UIの初期化
+        characterImage = this.GetComponent<SpriteRenderer>();
+        characterImage.sprite = status.status.characterImage; 
+        
+        
+        polygonCollider=this.GetComponent<PolygonCollider2D>();
+        ResetPolygonShape(polygonCollider, characterImage);
+        
+        TMP_Text[] TMP_Texts = this.GetComponentsInChildren<TMP_Text>();
+        nameText = TMP_Texts[0];
+        nameText.text = status.status.characterName;
+        damageText = TMP_Texts[1];
+
+        skillAndTarget = this.GetComponent<EnemySelectSkillAndTarget>();
+
+        // ステータス初期値
+        status.status.currentHP = status.status.maxHP;
+        status.status.currentSP = status.status.maxSP;
+
+        // その他パラメータ初期値
+        damageRate = status.takedamageRatio;
+        easyDecay = status.easydecayDamage;
+        DacayDamage = status.decayDamageRatioLimit;
+        recover = status.recoverDamageRatio;
+
+        // プレイヤー情報取得
+        player = GameObject.FindWithTag("Player").GetComponent<PlayerStatus>();
+    }
+  
+    public void ResetPolygonShape(PolygonCollider2D polygon,SpriteRenderer sprite)
+    {
+        if (polygon == null || sprite == null || sprite.sprite == null) return; 
+
+
+        int shapeCount=sprite.sprite.GetPhysicsShapeCount();
+        polygon.pathCount = shapeCount;
+
+        for (int i = 0; i < shapeCount; i++)
+        {
+            List<Vector2> path = new List<Vector2>();
+            sprite.sprite.GetPhysicsShape(i, path);
+
+            polygon.SetPath(i, path);
+
+        }
+    }
+
 
     public void SetDefault(CommonStatus common)
     {
@@ -105,88 +149,22 @@ public class Enemy : MonoBehaviour,ICharacterSet, IBuffEffect
         }
     }
    
+  
+   
+    
+    
     private void OnTriggerEnter2D(Collider2D collision)//攻撃を受けるとき
     {
         if (collision.gameObject.tag == "PlayerAttack")
         {
             countTime = 0;
-            Debug.Log("aaa");
-            status.status.TakeDamage(collision.gameObject.GetComponent<Weapon>().attackPower+(int)player.status.attackPower);
-            damageText.text = (collision.gameObject.GetComponent<Weapon>().attackPower+ (int)player.status.attackPower).ToString();
+            var damage = collision.gameObject.GetComponent<Weapon>().attackPower + (int)player.status.attackPower-(int)status.status.defensePower;
+
+            OnDamaged?.Invoke(damage);
+          status.status.TakeDamage(damage);
+            
             isDamage = true;
         }
 
-    }
-    public CommonStatus SelectTarget(SkillData skill)//スキルごとにターゲットが変わる
-    {
-        CommonStatus target;
-
-        switch (skill.skillType)
-        {
-            case SkillType.Attack:
-                {
-
-                    target = player.status;
-                    return target;
-                }
-            case SkillType.Heal:
-                {
-
-                    target = this.status.status;
-                    return target;
-                }
-            case SkillType.Defence:
-                {
-
-                    target = this.status.status;
-                    return target;
-                }
-            case SkillType.Buff:
-                {
-                    target = this.status.status;
-                    return target;
-                }
-            case SkillType.Debuff:
-                {
-                    target = player.status
-                      ;
-                    return target;
-                }
-
-        }
-
-
-
-
-        return null;
-    }
-    public SkillData SelectSkill(EnemyStatus status)
-
-        
-    {
-        switch (status.intelligence)
-        {
-            case
-                EnemyStatus.Intelligence.Fool://ランダムに選出
-                {
-                    int random =Random.Range(0, status.status.skillData.Count);
-
-                    return status.status.skillData[random];
-                  
-                }
-            case EnemyStatus.Intelligence.Normal://順番通り
-                {
-                    actionNum++; 
-                    return status.status.skillData[actionNum%status.status.skillData.Count];
-                   
-                    
-                }
-            case EnemyStatus.Intelligence.Smart://プレイヤーが嫌がるものを選出
-                {
-                    break;
-                }
-        }
-
-        return null;
     }
 }

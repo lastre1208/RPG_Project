@@ -3,12 +3,12 @@ using UnityEngine;
 
 public class Weapon : MonoBehaviour
 {
-    [SerializeField]WeaponData weapon;
+    public WeaponData weapon;
     public Sprite icon;
     public string weaponName;
     public int attackPower;
     public float fireInterval;
-    public int bulletCount;
+    public float bulletScale = 1f;
 
     private void Start()
     {
@@ -16,6 +16,7 @@ public class Weapon : MonoBehaviour
         weaponName = weapon.weaponName;
         attackPower = weapon.attackPower;
         fireInterval = weapon.fireInterval;
-        bulletCount = weapon.bulletCount;
+        bulletScale = weapon.bulletScale;
+
     }
 }

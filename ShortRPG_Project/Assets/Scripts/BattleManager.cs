@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using System.Linq;
 public enum BattleState
 {
     START,
@@ -15,7 +16,7 @@ public class BattleManager : MonoBehaviour//戦闘の一連の流れを管理するクラス
     
     public BattleState state=BattleState.START;
     public UIManager manager;
-
+    public SkillExecuter skill;
     public List<Enemy> enemies = new List<Enemy>();//敵のステータス。エンカウント時に読み込む。
     public PlayerStatus player;//プレイヤーのステータス。
   
@@ -86,7 +87,30 @@ public class BattleManager : MonoBehaviour//戦闘の一連の流れを管理するクラス
     {
 
         Debug.Log("敵のターン");
-        ExecuteAction();
+       
+        foreach (Enemy enemy in enemies)
+        {
+            if (!enemy.status.status.IsDead())
+            {
+                SkillData selectSkill = enemy.SelectSkill(enemy.status);
+                if (selectSkill.isAllTarget)
+                {
+                    foreach (Enemy targetenemy in enemies)
+                    {
+                        skill.ExecuteSkill(selectSkill, enemy.status.status, targetenemy.status.status);
+                    }
+                  
+
+                }
+                else
+                {
+                    skill.ExecuteSkill(selectSkill, enemy.status.status, enemy.SelectTarget(selectSkill));
+                }
+                   
+            }
+
+
+        } ExecuteAction();
 
     }
    public void ExecuteAction()//行動実行
@@ -98,12 +122,19 @@ public class BattleManager : MonoBehaviour//戦闘の一連の流れを管理するクラス
         }
         else if(state==BattleState.PLAYERTURN)
         {
+            player.status.UpdateBuffsPerTurn();
             SetTurn(BattleState.ENEMYTURN);
             
         }
         else
         {
             SetTurn(BattleState.PLAYERTURN);
+
+            foreach (Enemy enemy in enemies)
+            {
+
+                enemy.status.status.UpdateBuffsPerTurn();
+            }
             Debug.Log("プレイヤーのターン");
         }
     }
@@ -120,7 +151,7 @@ public class BattleManager : MonoBehaviour//戦闘の一連の流れを管理するクラス
     }
     public bool CheckBattleEnd()
     {
-        if (player.IsDead())
+        if (player.status.IsDead())
         {
             SetTurn(BattleState.LOST);
             Debug.Log("敗北");
@@ -131,7 +162,7 @@ public class BattleManager : MonoBehaviour//戦闘の一連の流れを管理するクラス
         foreach (Enemy status in enemies)
         {
            
-            if (status.IsDead())//敵が全員死んでたら完了
+            if (status.status.status.IsDead())//敵が全員死んでたら完了
             {
                 count++;
 

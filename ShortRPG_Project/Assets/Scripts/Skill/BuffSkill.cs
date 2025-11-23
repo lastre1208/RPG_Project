@@ -1,7 +1,7 @@
-using UnityEngine;
+//using UnityEngine;
 
-[CreateAssetMenu(menuName = "Skills/BuffSkill")]
-public class BuffSkill : StateChangeSkill
-{
-    public StateChangeSkill skill;
-}
+//[CreateAssetMenu(menuName = "Skills/BuffSkill")]
+//public class BuffSkill : StateChangeSkill
+//{
+//    public StateChangeSkill skill;
+//}

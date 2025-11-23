@@ -92,7 +92,7 @@ public class SelectTarget : MonoBehaviour
     {
         EndSelect();
         Debug.Log("ターゲット選択完了");
-        command.Target=targetEnemy;
+        //command.Target=targetEnemy;
         command.PlayAction();
         commandUI.interactable=true;
     }

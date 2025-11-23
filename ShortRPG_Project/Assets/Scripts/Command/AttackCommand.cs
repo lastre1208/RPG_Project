@@ -6,12 +6,13 @@ public class AttackCommand : ICommand//UŒ‚ŒnB¡‚Í’ÊíUŒ‚‚Ì‚İB
    public void Execute( ActionContext action )
    {
       
-       //action.TakeDamage(action.user.attackPower);
+       action.target.TakeDamage((int)(action.user.attackPower-action.target.defensePower));
         
-       //if (action.target.IsDead())
-       // {
-       //     Debug.Log(action.target.characterName + "‚Í“|‚ê‚½I");
-       // }
+        Debug.Log(action.user.characterName + "‚ÌUŒ‚I" + action.target.characterName + "‚É" + (int)(action.user.attackPower - action.target.defensePower) + "‚Ìƒ_ƒ[ƒWI");
+        if (action.target.IsDead())
+        {
+            Debug.Log(action.target.characterName + "‚Í“|‚ê‚½I");
+        }
     }
 
 }

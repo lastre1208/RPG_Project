@@ -3,8 +3,10 @@ using UnityEngine;
 
 public class SkillExecuter : MonoBehaviour
 {
+   
+   
 
-    public void ExecuteSkill(CommonStatus user, CommonStatus target, SkillData skill)
+    public void ExecuteSkill(SkillData skill,CommonStatus user ,CommonStatus target)
     {
         ICommand command = null;
 
@@ -42,8 +44,7 @@ public class SkillExecuter : MonoBehaviour
         if (command != null)
         {
             var context = new ActionContext
-            {
-                user = user,
+            { user = user,
                 target = target,
                 skill = skill,
 

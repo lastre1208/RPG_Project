@@ -9,13 +9,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8ddcdd40040354d439978c2eb073a2fa, type: 3}
-  m_Name: Defence
+  m_Script: {fileID: 11500000, guid: 64d2e1d6d05fd044c89eac4fc1db0761, type: 3}
+  m_Name: ScaleUp
   m_EditorClassIdentifier: 
-  skillName: defence
-  skillDescription: ddddd
-  skillCost: 0
-  skillType: 4
+  skillName: BigBullet
+  skillDescription: Tama Dekai
+  skillCost: 20
+  skillType: 2
   isAllTarget: 0
-  skillData: {fileID: 11400000}
-  cutRatio: 2
+  SkillData: {fileID: 11400000}
+  status: 4
+  modifiRatio: 1.2
+  enableTurn: 3
+  skill: {fileID: 11400000}

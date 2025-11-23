@@ -9,5 +9,5 @@ public class WeaponData : ScriptableObject
     public string weaponName;
     public int attackPower;
     public float fireInterval;
-    public int bulletCount;
+    public float bulletScale=1f;
 }

@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 public class ShotExecuter : MonoBehaviour
 {
-    [SerializeField] GameObject shotIcon;
+
     [SerializeField] Image shotGauge;
     [SerializeField] Image shotTime;
     [SerializeField]MoveScope moveScope;
@@ -14,7 +14,7 @@ public class ShotExecuter : MonoBehaviour
     float countShotTime;
     public void Start()
     {
-        shotIcon.SetActive(false);
+        
         shotText.SetActive(false);
         shotGauge.gameObject.SetActive(false);
     }
@@ -23,17 +23,18 @@ public class ShotExecuter : MonoBehaviour
 
     public IEnumerator StartShot(PlayerStatus player )
     {
-         shotIcon.SetActive(true);
+     
         yield return new WaitForSeconds(shotWaitTime);
 
+        float interval = player.equippedWeapon.fireInterval * player.intervalRatio;
        
         shotText.SetActive(true);
         shotGauge.gameObject.SetActive(true);
         while (countEnableTime < player.shotTime)
         {
             shotTime.fillAmount =1- countEnableTime / player.shotTime;
-            shotGauge.fillAmount = countShotTime / player.equippedWeapon.fireInterval;
-            if (countShotTime > player.equippedWeapon.fireInterval)
+            shotGauge.fillAmount = countShotTime /interval;
+            if (countShotTime > interval)
             {
                 
                 countShotTime = 0f;
@@ -54,7 +55,7 @@ public class ShotExecuter : MonoBehaviour
         }
         shotGauge.fillAmount = 0;
         countEnableTime = 0;
-        shotIcon.SetActive(false);
+        
         shotGauge.gameObject.SetActive(false);
         yield return null;
     }

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 011377261fd1d274ba2c67b02c03677a, type: 3}
   m_Name: SpeedBullet
   m_EditorClassIdentifier: 
-  icon: {fileID: 0}
+  icon: {fileID: -7084317487821090236, guid: 38ecb018b852fa14ea02c65c0b4ae30a, type: 3}
   weaponName: 
   attackPower: 2
   fireInterval: 0.3

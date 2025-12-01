@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 011377261fd1d274ba2c67b02c03677a, type: 3}
   m_Name: PowerBullet
   m_EditorClassIdentifier: 
-  icon: {fileID: 0}
+  icon: {fileID: 2242535657994840555, guid: 03ec8c5d6cd91f440851178a79da172a, type: 3}
   weaponName: 
   attackPower: 30
   fireInterval: 1

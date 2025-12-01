@@ -11,13 +11,11 @@ public class EnemyDisplay : MonoBehaviour
     [SerializeField] GameObject damageText;
     [SerializeField] SpriteRenderer spriteRenderer;
     [SerializeField] BarUIDisplay barDisplay;
-    //[SerializeField] Image enemyHP;
-    [SerializeField] Image enemyHP_Back;
-    //[SerializeField] Image enemyHP_Damage;
+    [SerializeField] Image enemyHP_Back; 
     [SerializeField] int enemyHP_diff;
     [SerializeField] Canvas canvas;
     [SerializeField] float damageBlinkTime = 0.05f;
-    //[SerializeField] float derayDamageTime = 0.5f;
+    [SerializeField]Gradient decayGradient = new Gradient();//ダメージが減衰する程色が変わる
 
     DelayBar delay;
     Coroutine damageCoroutine;
@@ -57,6 +55,8 @@ public class EnemyDisplay : MonoBehaviour
 
         barDisplay.main.fillAmount = (float)enemy.commonStatus.currentHP / enemy.commonStatus.maxHP;
 
+        var normalizedRatio =Mathf.InverseLerp(enemy.dacayDamageLimit,1f,enemy.commonStatus.damageRatio);
+        spriteRenderer.color=decayGradient.Evaluate(normalizedRatio);
         if (enemy.IsDamage && !isDead)
         {
             BlinkUpdate();

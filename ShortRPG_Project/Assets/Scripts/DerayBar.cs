@@ -21,6 +21,6 @@ public class DelayBar : MonoBehaviour
             yield return null;
         }
 
-
+        damage.fillAmount=main.fillAmount;
     }
 }

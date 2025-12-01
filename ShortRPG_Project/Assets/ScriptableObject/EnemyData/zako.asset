@@ -16,10 +16,10 @@ MonoBehaviour:
     characterImage: {fileID: -1111021167199550667, guid: d745cbf569e1d6247b13d393f131ebcb, type: 3}
     characterName: Bit=1
     maxHP: 100
-    currentHP: -120
+    currentHP: 100
     maxSP: 0
     currentSP: 0
-    attackPower: 10
+    attackPower: 200
     defensePower: 0
     damageRatio: 1
     skillData:
@@ -31,6 +31,6 @@ MonoBehaviour:
   speed: 0
   intelligence: 0
   takedamageRatio: 1
-  decayDamageRatioLimit: 1
+  decayDamageRatioLimit: 0.5
   easydecayDamage: 100
   recoverDamageRatio: 0.1

@@ -49,7 +49,7 @@ public class BattleManager : MonoBehaviour//戦闘の一連の流れを管理するクラス
                 }
             case BattleState.STARTTURN://ターンのはじめ
                 {
-                    PredicNextSkill();
+                    EnemySetUp();
                     SetTurn(BattleState.PLAYERTURN);
 
                     break;
@@ -108,18 +108,21 @@ public class BattleManager : MonoBehaviour//戦闘の一連の流れを管理するクラス
        
     }
    
- public void PredicNextSkill()//発動するスキルは事前に決める
+ public void EnemySetUp()//発動するスキルの選択とダメージ減衰率の回復
     {
         foreach (Enemy enemy in enemies)
         {
             if (!enemy.commonStatus.IsDead() || !enemy.IsActive)
             {
                 enemy.nextSkill = enemy.SkillAndTarget.SelectSkill(enemy);
+                enemy.DecayDamage.RecoverDecay(enemy);
                 Debug.Log(enemy.nextSkill);
             }
 
 
         }
+
+
     }
    
     public void EnemyTurn()//敵の行動

@@ -24,10 +24,10 @@ public class Enemy : MonoBehaviour, ICharacterSet, IBuffEffect, IDebuffEffect
     public SkillData nextSkill;
     public Intelligence Intelligence;
     public int exp;
-    public float damageRate;
-    public float DacayDamage;
+
+    public float dacayDamageLimit;
     public float easyDecay;
-    public float recover;
+    public float recoverDamageRate;
   
 
     private bool isActive = true;
@@ -51,12 +51,23 @@ public class Enemy : MonoBehaviour, ICharacterSet, IBuffEffect, IDebuffEffect
     }
     DefaultEnemyStatus defaultEnemy = new();
     PlayerStatus player;
+    public PlayerStatus Player
+    {
+        get { return player; }
+    }
     PolygonCollider2D polygonCollider;
     private EnemySelectSkillAndTarget skillAndTarget;
     public EnemySelectSkillAndTarget SkillAndTarget
     {
         get { return skillAndTarget; }
     }
+    private EnemyDecayDamage decayDamage;
+
+    public EnemyDecayDamage DecayDamage
+    {
+        get { return decayDamage; }
+    }
+
 
     private void Update()
     {
@@ -94,17 +105,15 @@ public class Enemy : MonoBehaviour, ICharacterSet, IBuffEffect, IDebuffEffect
 
 
         skillAndTarget = this.GetComponent<EnemySelectSkillAndTarget>();
-
-        // ステータス初期値
-        // status.status.currentHP = status.status.maxHP;
-        // status.status.currentSP = status.status.maxSP;
+        decayDamage = this.GetComponent<EnemyDecayDamage>();
+      
 
         // その他パラメータ初期値
         exp = status.exp;
-        damageRate = status.takedamageRatio;
+       
         easyDecay = status.easydecayDamage;
-        DacayDamage = status.decayDamageRatioLimit;
-        recover = status.recoverDamageRatio;
+        dacayDamageLimit = status.decayDamageRatioLimit;
+        recoverDamageRate = status.recoverDamageRatio;
 
         // プレイヤー情報取得
         player = GameObject.FindWithTag("Player").GetComponent<PlayerStatus>();
@@ -150,10 +159,10 @@ public class Enemy : MonoBehaviour, ICharacterSet, IBuffEffect, IDebuffEffect
         common.damageRatio = status.status.damageRatio;
 
 
-        defaultEnemy.defaultDamageRate = damageRate;
-        defaultEnemy.defaultDacayDamage = DacayDamage;
+      
+        defaultEnemy.defaultDacayDamage = dacayDamageLimit;
         defaultEnemy.defaultEasyDecay = easyDecay;
-        defaultEnemy.defaultRecover = recover;
+        defaultEnemy.defaultRecover = recoverDamageRate;
     }
     public void ApplyBuffEffect(List<BuffEntry> buffs)
     {
@@ -226,7 +235,7 @@ public class Enemy : MonoBehaviour, ICharacterSet, IBuffEffect, IDebuffEffect
             countTime = 0;
             var damage = collision.gameObject.GetComponent<Weapon>().attackPower + (int)player.status.attackPower - (int)commonStatus.defensePower;
             commonStatus.damageData.hitPosition=collision.gameObject.transform.position;
-     
+            decayDamage.DacayDamage(this,damage);
             commonStatus.TakeDamage(damage);
 
             isDamage = true;

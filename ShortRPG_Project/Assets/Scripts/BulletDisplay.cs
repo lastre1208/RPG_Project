@@ -5,6 +5,7 @@ using System.Collections.Generic;
 public class BulletDisplay : MonoBehaviour
 {
     [SerializeField] List<Image> bulletIcons;
+    [SerializeField] List<Image> BackImages;
     [SerializeField]List<Weapon> weapon;
     [SerializeField] PlayerStatus player;
     [SerializeField] Color selectedColor;
@@ -23,13 +24,13 @@ public class BulletDisplay : MonoBehaviour
             if (weapon[i] == player.equippedWeapon)
             {
 
-                bulletIcons[i].color = selectedColor;
+               BackImages[i].color = selectedColor;
             }
             else
             {
-                bulletIcons[i].color=defaultColor;
+                BackImages[i].color=defaultColor;
             }
-
+            bulletIcons[i].sprite = weapon[i].icon;
         }
       
     }

@@ -9,11 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 011377261fd1d274ba2c67b02c03677a, type: 3}
-  m_Name: NormalBullet
+  m_Script: {fileID: 11500000, guid: fb8bb34921a6ac147b80f288e370caf9, type: 3}
+  m_Name: SkillImageDatabase
   m_EditorClassIdentifier: 
-  icon: {fileID: 9210400886983063737, guid: 30826fe38e03ce14e956672fec0e8576, type: 3}
-  weaponName: 
-  attackPower: 10
-  fireInterval: 0.5
-  bulletScale: 1
+  icons:
+  - skillType: 0
+    iconSprite: {fileID: -788194021542127390, guid: 1c49e6c65192fe24199b2c59508b68ee, type: 3}

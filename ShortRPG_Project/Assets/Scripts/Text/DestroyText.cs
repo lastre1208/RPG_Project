@@ -1,6 +1,6 @@
 using UnityEngine;
 using TMPro;
-public class DestroyObject : MonoBehaviour
+public class DestroyText : MonoBehaviour
 {
     [SerializeField]float destroyTime = 1.0f;
 

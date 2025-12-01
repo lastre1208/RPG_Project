@@ -15,6 +15,19 @@ public class MoveScope : MonoBehaviour//マウスの位置に照準を移動
         scopeCollider.enabled=false;
       
     }
+
+    public  void ChangeScopeCollider(Weapon weapon)
+    {
+        scopeCollider.enabled = false;
+
+        var collider = weapon.GetComponent<Collider2D>();
+        if (collider != null) { 
+       
+            scopeCollider = collider;
+        
+        }
+
+    }
     public void SwitchScopeCollider(bool scopeSwitch)//コライダーを有効にする
     {
         if (scopeSwitch) {

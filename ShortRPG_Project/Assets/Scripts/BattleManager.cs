@@ -6,6 +6,8 @@ public enum BattleState
     START,
     PLAYERTURN,
     ENEMYTURN,
+    STARTTURN,
+    ENDTURN,
     WON,
     LOST
 }
@@ -25,11 +27,11 @@ public class BattleManager : MonoBehaviour//戦闘の一連の流れを管理するクラス
 
     private void Update()
     {
-        switch (state)
+        switch (state)//START→STARTTURN→PLAYER(敵全滅でWONへ移行)→ENEMY(プレイヤー死亡でLOSTへ移行)→END→STARTTURNへ
         {
             case BattleState.START:
                 {
-               
+
                     StartBatlle();
                     break;
                 }
@@ -43,6 +45,25 @@ public class BattleManager : MonoBehaviour//戦闘の一連の流れを管理するクラス
             case BattleState.ENEMYTURN:
                 {
                     EnemyTurn();
+                    break;
+                }
+            case BattleState.STARTTURN://ターンのはじめ
+                {
+                    PredicNextSkill();
+                    SetTurn(BattleState.PLAYERTURN);
+
+                    break;
+                }
+            case BattleState.ENDTURN://ターンの終わり
+                {
+
+                    player.status.UpdateBuffsPerTurn();
+                    foreach (Enemy enemy in enemies)
+                    {
+
+                        enemy.commonStatus.UpdateBuffsPerTurn();
+                    }
+                    SetTurn(BattleState.STARTTURN);
                     break;
                 }
 
@@ -69,12 +90,12 @@ public class BattleManager : MonoBehaviour//戦闘の一連の流れを管理するクラス
         Debug.Log("戦闘開始");
         foreach (Enemy enemy in enemies)
         {
-            Debug.Log(enemy.status.status.characterName + "があらわれた！");
+            Debug.Log(enemy.commonStatus.characterName + "があらわれた！");
 
         }
             
         
-        SetTurn(BattleState.PLAYERTURN);
+        SetTurn(BattleState.STARTTURN);
         Debug.Log("プレイヤーのターン");
         manager.EnableBattleUI();
        
@@ -87,40 +108,60 @@ public class BattleManager : MonoBehaviour//戦闘の一連の流れを管理するクラス
        
     }
    
- 
+ public void PredicNextSkill()//発動するスキルは事前に決める
+    {
+        foreach (Enemy enemy in enemies)
+        {
+            if (!enemy.commonStatus.IsDead() || !enemy.IsActive)
+            {
+                enemy.nextSkill = enemy.SkillAndTarget.SelectSkill(enemy);
+                Debug.Log(enemy.nextSkill);
+            }
+
+
+        }
+    }
    
-    public void EnemyTurn()//敵の思考
+    public void EnemyTurn()//敵の行動
     {
 
         Debug.Log("敵のターン");
        
         foreach (Enemy enemy in enemies)
         {
-            if (!enemy.status.status.IsDead())
+            if (!enemy.commonStatus.IsDead()||!enemy.IsActive)
             {
-                SkillData selectSkill = enemy.SkillAndTarget.SelectSkill(enemy.status);
-                if (selectSkill.isAllTarget)
+               // enemy.nextSkill = enemy.SkillAndTarget.SelectSkill(enemy);
+                if (enemy.nextSkill != null)
                 {
-                    foreach (Enemy targetenemy in enemies)
-                    {
-                        skill.ExecuteSkill(selectSkill, enemy.status.status, targetenemy.status.status);
-                    }
-                  
 
+                    if (enemy.nextSkill.isAllTarget)
+                    {
+                        foreach (Enemy targetenemy in enemies)
+                        {
+                            if (!targetenemy.commonStatus.IsDead())
+                            {
+                                skill.ExecuteSkill(enemy.nextSkill, enemy.commonStatus, targetenemy.status.status);
+
+                            }
+                           
+                        }
+
+
+                    }
+                    else
+                    {
+                        var target = enemy.SkillAndTarget.SelectTarget(enemy.nextSkill, player.status, enemy.commonStatus);
+                        skill.ExecuteSkill(enemy.nextSkill, enemy.commonStatus, target);
+                    }
                 }
-                else
-                {
-                    var target = enemy.SkillAndTarget.SelectTarget(selectSkill, player.status, enemy.status.status);
-                    skill.ExecuteSkill(selectSkill, enemy.status.status, target);
-                }
-                   
             }
 
 
         } ExecuteAction();
 
     }
-   public void ExecuteAction()//行動実行
+   public void ExecuteAction()//行動実行。プレイヤー→敵→ターン更新の順番で処理される。
     {
         if (CheckBattleEnd())
         {
@@ -129,19 +170,15 @@ public class BattleManager : MonoBehaviour//戦闘の一連の流れを管理するクラス
         }
         else if(state==BattleState.PLAYERTURN)
         {
-            player.status.UpdateBuffsPerTurn();
+           
             SetTurn(BattleState.ENEMYTURN);
             
         }
-        else
+        else if(state==BattleState.ENEMYTURN)
         {
-            SetTurn(BattleState.PLAYERTURN);
+            SetTurn(BattleState.ENDTURN);
 
-            foreach (Enemy enemy in enemies)
-            {
-
-                enemy.status.status.UpdateBuffsPerTurn();
-            }
+         
             Debug.Log("プレイヤーのターン");
         }
     }
@@ -165,31 +202,31 @@ public class BattleManager : MonoBehaviour//戦闘の一連の流れを管理するクラス
             return true;
 
         }
-         int count = 0;
+        else if (EnemyDeadCheck())
+        {
+            SetTurn(BattleState.WON);
+            Debug.Log("勝利");
+            return true;
+
+        }
+
+        return false;
+
+
+    }
+
+    public bool EnemyDeadCheck()
+    {
+        var count = 0;
         foreach (Enemy status in enemies)
         {
-           
-            if (status.status.status.IsDead())//敵が全員死んでたら完了
+            if (status.commonStatus.IsDead())
             {
+
                 count++;
 
-                if (count == enemies.Count)
-                {
-                    SetTurn(BattleState.WON);
-                    Debug.Log("勝利");
-                    return true;
-                }
-
-
             }
-            else
-            {
-                return false;
-            }
-                
         }
-        return false;
-        
-        
+        return count == enemies.Count;
     }
 }

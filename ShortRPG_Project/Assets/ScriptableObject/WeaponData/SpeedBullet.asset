@@ -16,4 +16,4 @@ MonoBehaviour:
   weaponName: 
   attackPower: 2
   fireInterval: 0.3
-  bulletScale: 1
+  bulletScale: 0.5

@@ -14,9 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   status:
     characterImage: {fileID: -1111021167199550667, guid: d745cbf569e1d6247b13d393f131ebcb, type: 3}
-    characterName: zakko
+    characterName: Bit=1
     maxHP: 100
-    currentHP: 0
+    currentHP: -120
     maxSP: 0
     currentSP: 0
     attackPower: 10
@@ -25,9 +25,11 @@ MonoBehaviour:
     skillData:
     - {fileID: 11400000, guid: a084cafde9587e24592227bf057c5ffa, type: 2}
     buffs: []
+    debuffs: []
   ID: 0
   exp: 0
   speed: 0
+  intelligence: 0
   takedamageRatio: 1
   decayDamageRatioLimit: 1
   easydecayDamage: 100

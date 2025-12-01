@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 40f4565f0a3b78d4db4ac8e381e78897
+guid: 9930fed18de94f448a6c52a658d2c0ed
 ScriptedImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -72,7 +72,7 @@ ScriptedImporter:
     textureFormatSet: 0
     applyGammaDecoding: 0
   previousAsepriteImporterSettings:
-    fileImportMode: 1
+    fileImportMode: 0
     importHiddenLayers: 0
     layerImportMode: 1
     defaultPivotSpace: 0
@@ -85,7 +85,7 @@ ScriptedImporter:
     addSortingGroup: 1
     addShadowCasters: 0
   asepriteImporterSettings:
-    fileImportMode: 1
+    fileImportMode: 0
     importHiddenLayers: 0
     layerImportMode: 1
     defaultPivotSpace: 0
@@ -98,7 +98,7 @@ ScriptedImporter:
     addSortingGroup: 1
     addShadowCasters: 0
   importFileNodeState: 1
-  platformSettingsDirtyTick: 638999418109413252
+  platformSettingsDirtyTick: 639000532005138473
   textureAssetName: 
   singleSpriteImportData:
   - name: 
@@ -123,7 +123,7 @@ ScriptedImporter:
     tessellationDetail: 0
     uvTransform: {x: 0, y: 0}
   animatedSpriteImportData:
-  - name: zako_1
+  - name: Square
     originalName: 
     pivot: {x: 0.5, y: 0}
     alignment: 9
@@ -134,8 +134,8 @@ ScriptedImporter:
       x: 4
       y: 4
       width: 64
-      height: 47
-    spriteID: 3c8d7110ec40a82468f0ed7bf00eed52
+      height: 64
+    spriteID: 2e89bdfe4be990049b1b061740d51ed7
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -144,29 +144,50 @@ ScriptedImporter:
     edges: []
     tessellationDetail: 0
     uvTransform: {x: 4, y: 4}
-  spriteSheetImportData: []
+  spriteSheetImportData:
+  - name: Square_0
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 4
+      y: 4
+      width: 64
+      height: 64
+    spriteID: 59b7243378a0a214488f5891c93f418e
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 0, y: 0}
   asepriteLayers:
   - layerIndex: 0
     uuid:
-      value0: 1524961901
+      value0: 3790303425
       value1: 0
       value2: 0
       value3: 0
     guid: 0
-    name: zako_1
+    name: Square
     layerFlags: 0
     layerType: 0
     blendMode: 0
     cells:
-    - name: zako_1
+    - name: Square
       frameIndex: 0
       additiveSortOrder: 0
       cellRect:
         x: 0
         y: 0
         width: 64
-        height: 47
-      spriteId: 3c8d7110ec40a82468f0ed7bf00eed52
+        height: 64
+      spriteId: 2e89bdfe4be990049b1b061740d51ed7
     linkedCells: []
     parentIndex: -1
   platformSettings:
@@ -210,4 +231,4 @@ ScriptedImporter:
   secondarySpriteTextures: []
   spritePackingTag: 
   canvasSize: {x: 64, y: 64}
-  previousTextureSize: {x: 128, y: 64}
+  previousTextureSize: {x: 128, y: 128}

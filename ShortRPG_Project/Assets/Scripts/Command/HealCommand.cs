@@ -9,11 +9,12 @@ public class HealCommand : ICommand
 
         if (action.target.maxHP == action.target.currentHP)   return;
 
-        action.target.currentHP += (int)((action.target.maxHP / healSkill.healPower));
-        if(action.target.currentHP>action.target.maxHP)
-        {
-            action.target.currentHP = action.target.maxHP;
-        }
+        action.target.TakeHeal(healSkill.healPower);
+        //action.target.currentHP += (int)((action.target.maxHP / healSkill.healPower));
+        //if(action.target.currentHP>action.target.maxHP)
+        //{
+        //    action.target.currentHP = action.target.maxHP;
+        //}
         action.user.currentSP -= healSkill.skillCost;
     }
 }

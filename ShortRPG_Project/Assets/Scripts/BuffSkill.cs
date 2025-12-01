@@ -1,4 +1,6 @@
 using UnityEngine;
+
+
 public enum ModifyStatus//変化させるステータスの種類
 {
     Power,
@@ -9,7 +11,7 @@ public enum ModifyStatus//変化させるステータスの種類
     Time,
     None,
 }
-
+[CreateAssetMenu(menuName = "Skills/BuffSkill")]
 public class BuffSkill : SkillData//状態変化系スキル
 {
     public SkillData SkillData;

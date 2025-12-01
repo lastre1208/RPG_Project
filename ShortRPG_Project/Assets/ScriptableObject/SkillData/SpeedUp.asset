@@ -9,16 +9,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 64d2e1d6d05fd044c89eac4fc1db0761, type: 3}
-  m_Name: IntervalUp
+  m_Script: {fileID: 11500000, guid: 58ae35836a1d5004f95d63f4a705bccc, type: 3}
+  m_Name: SpeedUp
   m_EditorClassIdentifier: 
-  skillName: SpeedUp
-  skillDescription: tama hayakunaru
-  skillCost: 50
+  skillName: "\u30E9\u30D4\u30C3\u30C9\u30B7\u30E7\u30C3\u30C8"
+  skillDescription: "\u767A\u5C04\u9593\u9694\u3092\u77ED\u7E2E"
+  skillCost: 20
   skillType: 2
   isAllTarget: 0
   SkillData: {fileID: 11400000}
   status: 3
-  modifiRatio: 0.5
-  enableTurn: 2
-  skill: {fileID: 11400000}
+  modifiRatio: 0.8
+  enableTurn: 3

@@ -14,9 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   status:
     characterImage: {fileID: -1111021167199550667, guid: d745cbf569e1d6247b13d393f131ebcb, type: 3}
-    characterName: enemy
+    characterName: BiBit=16
     maxHP: 199
-    currentHP: 199
+    currentHP: -21
     maxSP: 0
     currentSP: 0
     attackPower: 100

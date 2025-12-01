@@ -9,7 +9,7 @@ public class SkillDisplay : MonoBehaviour
     [SerializeField] List<TMP_Text> skillTexts;
     [SerializeField] List<Button> skillButtons;
     [SerializeField] PlayerStatus player;
-
+    [SerializeField]PlayerSPDisplay playerSPDisplay;
     [SerializeField]SelectSkill select;
 
     public void Awake()
@@ -26,6 +26,7 @@ public class SkillDisplay : MonoBehaviour
             int localIdx = i; // ƒNƒ[ƒWƒƒ‘Îô
             skillButtons[i].onClick.RemoveAllListeners();
             skillButtons[i].onClick.AddListener(() =>select.OnSkillButtonClicked(localIdx));
+            skillButtons[i].onClick.AddListener(() => playerSPDisplay.DelayDamage());
         }
 
         for (int i = 0; i < skillTexts.Count; i++)

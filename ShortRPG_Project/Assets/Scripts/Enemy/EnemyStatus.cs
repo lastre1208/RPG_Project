@@ -1,18 +1,20 @@
 using JetBrains.Annotations;
 using UnityEngine;
-[CreateAssetMenu(fileName = "EnemyStatus", menuName = "ScriptableObjects/EnemyStatus")]
 
 
 
-[System.Serializable]
-public class EnemyStatus : ScriptableObject
-{
     public enum Intelligence
     {
         Fool,
         Normal,
         Smart
     }
+
+[System.Serializable]
+[CreateAssetMenu(fileName = "EnemyStatus", menuName = "ScriptableObjects/EnemyStatus")]
+public class EnemyStatus : ScriptableObject
+{
+   
   
    public CommonStatus status;
     public int ID;

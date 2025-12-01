@@ -3,5 +3,5 @@ using UnityEngine;
 public class HealSkill :SkillData
 {
  public SkillData skillData;
-    public float healPower;
+    public int healPower;
 }

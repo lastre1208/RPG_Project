@@ -32,18 +32,29 @@ public class ShotExecuter : MonoBehaviour
         shotGauge.gameObject.SetActive(true);
         while (countEnableTime < player.shotTime)
         {
+
+
+
             shotTime.fillAmount =1- countEnableTime / player.shotTime;
             shotGauge.fillAmount = countShotTime /interval;
+           
             if (countShotTime > interval)
             {
                 
                 countShotTime = 0f;
                 Debug.Log("Shot!");
                 moveScope.SwitchScopeCollider(true);
+
+                if (player.status.StateCheck(player.status,EnableState.Panic))
+                {
+                    var rand = Random.Range(0.5f,2f);
+                    interval*=rand;
+                }
             }
             if(countEnableTime> showShotText)
             {
                 shotText.SetActive(false);
+
             }
 
 

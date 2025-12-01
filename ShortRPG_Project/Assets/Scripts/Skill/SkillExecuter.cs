@@ -10,6 +10,7 @@ public class SkillExecuter : MonoBehaviour
     {
         ICommand command = null;
 
+        if (skill == null) return ;
         switch (skill.skillType)
         {
             case SkillType.Attack:

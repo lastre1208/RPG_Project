@@ -7,16 +7,11 @@ public class CommandSelect : MonoBehaviour//コマンドボタンが押されたときの処理
     public GameObject selectUI;
     public GameObject subStatusUI;
     public BattleManager manager;
-   // public SelectTarget t_select;
+  
     public SkillExecuter skill;
-  public ShotExecuter shot;
+    public ShotExecuter shot;
     public SelectSkill select;
-   // private Enemy target;
-    //public Enemy Target
-    //{
-    //    get { return target; }
-    //    set { target = value; }
-    //}
+   
     private SkillData selectSkill;
     public SkillData SelectSkill
     {
@@ -42,12 +37,12 @@ public class CommandSelect : MonoBehaviour//コマンドボタンが押されたときの処理
         yield return StartCoroutine(shot.StartShot(manager.player));
         PlayAction();
         subStatusUI.SetActive(true);
-     //   selectUI.SetActive(true);
+        selectUI.SetActive(true);
     }
     public void OnSkillButton()//スキル発動
     {
         if (manager.state != BattleState.PLAYERTURN) return;
-        select.StartSelect();
+     
 
     }
  

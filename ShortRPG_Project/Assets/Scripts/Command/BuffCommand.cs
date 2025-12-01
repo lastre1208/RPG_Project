@@ -19,7 +19,7 @@ public class BuffCommand : ICommand
             return;
         }
 
-        if (user.currentSP < buffSkill.skillCost||user.currentSP-buffSkill.skillCost<0)
+        if (user.currentSP < buffSkill.skillCost)
         {
             Debug.Log("SP•s‘«II");
             return;

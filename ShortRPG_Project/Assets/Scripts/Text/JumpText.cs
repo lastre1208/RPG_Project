@@ -12,16 +12,17 @@ public class JumpText : MonoBehaviour
     [SerializeField]float randomXMove=100f;
     RectTransform jumpRectTransform;
    
+    public bool startJump= true;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         jumpRectTransform = GetComponent<RectTransform>();
 
-        StartCoroutine(JumpCoroutine());
+       if(startJump) StartCoroutine(JumpCoroutine());
     }
 
 
-    IEnumerator JumpCoroutine()
+  public  IEnumerator JumpCoroutine()
     {
         Vector3 start = jumpRectTransform.position;
         float target_Y = start.y + jumpHigh;

@@ -3,11 +3,11 @@ using UnityEngine;
 
 public class HealCommand : ICommand
 {
-  public void Execute(ActionContext action)//Š„‡‰ñ•œ
+  public bool Execute(ActionContext action)//Š„‡‰ñ•œ
     {
         var healSkill = action.skill as HealSkill;
 
-        if (action.target.maxHP == action.target.currentHP)   return;
+        if (action.target.maxHP == action.target.currentHP)   return false;
 
         action.target.TakeHeal(healSkill.healPower);
         //action.target.currentHP += (int)((action.target.maxHP / healSkill.healPower));
@@ -16,5 +16,6 @@ public class HealCommand : ICommand
         //    action.target.currentHP = action.target.maxHP;
         //}
         action.user.currentSP -= healSkill.skillCost;
+        return true;
     }
 }

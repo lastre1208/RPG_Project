@@ -6,6 +6,7 @@ TagManager:
   tags:
   - PlayerAttack
   - Canvas
+  - BattleManager
   layers:
   - Default
   - TransparentFX

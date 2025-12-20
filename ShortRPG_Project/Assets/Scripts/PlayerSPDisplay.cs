@@ -8,7 +8,8 @@ public class PlayerSPDisplay : MonoBehaviour
    
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
-    {
+    {  
+       // spDisplay.status.OnSPRecover += DelayRecover;
        spDisplay.status=player.status;
     }
 
@@ -16,6 +17,8 @@ public class PlayerSPDisplay : MonoBehaviour
     void Update()
     {
         spDisplay.main.fillAmount = (float)spDisplay.status.currentSP / spDisplay.status.maxSP;
+      
+      
     }
    
     public void DelayDamage()
@@ -26,7 +29,7 @@ public class PlayerSPDisplay : MonoBehaviour
     public void DelayRecover()
     {
 
-        float ratio = (float)spDisplay.status.currentHP / spDisplay.status.maxHP;
+        float ratio = (float)spDisplay.status.currentSP / spDisplay.status.maxSP;
 
         spDisplay.SetRecover(ratio);
     }

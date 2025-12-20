@@ -1,13 +1,16 @@
 using System.Collections;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 public class ShotExecuter : MonoBehaviour
 {
-
+    [SerializeField] TMP_Text hitText;
+    [SerializeField] TMP_Text countDownText;
     [SerializeField] Image shotGauge;
     [SerializeField] Image shotTime;
     [SerializeField]MoveScope moveScope;
-    [SerializeField] GameObject shotText;
+    [SerializeField] TMP_Text shotText;
+    [SerializeField]BattleManager battleManager;
     [SerializeField] float shotWaitTime;
     [SerializeField] float showShotText;
     float countEnableTime;
@@ -15,7 +18,9 @@ public class ShotExecuter : MonoBehaviour
     public void Start()
     {
         
-        shotText.SetActive(false);
+        shotText.enabled=(false);
+        countDownText.enabled=(false);
+        hitText.enabled=(false);
         shotGauge.gameObject.SetActive(false);
     }
 
@@ -23,14 +28,23 @@ public class ShotExecuter : MonoBehaviour
 
     public IEnumerator StartShot(PlayerStatus player )
     {
-     
-        yield return new WaitForSeconds(shotWaitTime);
+      countDownText.enabled=true;
+        for(int i = 3; i > 0; i--)
+        {
+            float wait = shotWaitTime / 3;
+            countDownText.text = i.ToString();
+            yield return new WaitForSeconds(wait);
+        }
+
+       countDownText.enabled = false;
+      //  yield return new WaitForSeconds(shotWaitTime);
 
         float interval = player.equippedWeapon.fireInterval * player.intervalRatio;
        
-        shotText.SetActive(true);
+        shotText.enabled = (true);
+        hitText.enabled = (true);
         shotGauge.gameObject.SetActive(true);
-        while (countEnableTime < player.shotTime)
+        while (countEnableTime < player.shotTime&&battleManager.state==BattleState.PLAYERTURN)
         {
 
 
@@ -53,8 +67,8 @@ public class ShotExecuter : MonoBehaviour
             }
             if(countEnableTime> showShotText)
             {
-                shotText.SetActive(false);
-
+                shotText.enabled = (false);
+              
             }
 
 
@@ -66,7 +80,8 @@ public class ShotExecuter : MonoBehaviour
         }
         shotGauge.fillAmount = 0;
         countEnableTime = 0;
-        
+        countShotTime = 0;
+        hitText.enabled = (false);
         shotGauge.gameObject.SetActive(false);
         yield return null;
     }

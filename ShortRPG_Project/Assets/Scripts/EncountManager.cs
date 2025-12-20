@@ -1,6 +1,9 @@
 using UnityEngine;
 using System.Collections.Generic;
 using NUnit.Framework;
+using JetBrains.Annotations;
+
+
 [System.Serializable]
 
 public class EncountPattern
@@ -13,6 +16,7 @@ public class EncountPattern
 
 public class EncountData
 {
+    public CustomRank rank;
   public List<EnemyStatus> EnemyList;
     public List<Vector2> EnemyPositionList;
 }
@@ -22,11 +26,19 @@ public class EncountManager : MonoBehaviour
     public List<EncountPattern> encountPatterns;
 
 
-    public List<Enemy> EncountEnemy(int level)
+    public List<Enemy> EncountEnemy(int level,CustomRank rank)//指定されたレベルとランクのパターンからランダムに選出する
     {
-       var rand = Random.Range(0, encountPatterns[level].EncountList.Count);
-        List<EnemyStatus> enemyStatusList = encountPatterns[level].EncountList[rand].EnemyList;
-        List<Vector2> positionList = encountPatterns[level].EncountList[rand].EnemyPositionList;
+        List <EncountData>appliedPatterns=new List<EncountData>();
+        foreach (EncountData pattern in encountPatterns[level].EncountList) {
+
+            if (pattern.rank == rank) {
+                appliedPatterns.Add(pattern);
+
+            }
+        } 
+       var rand = Random.Range(0, appliedPatterns.Count);
+        List<EnemyStatus> enemyStatusList = appliedPatterns[rand].EnemyList;
+        List<Vector2> positionList = appliedPatterns[rand].EnemyPositionList;
        
         int listCount = enemyStatusList.Count;
 
@@ -48,8 +60,8 @@ public class EncountManager : MonoBehaviour
             spawnedEnemy.Add(enemyData);
             
         }
-        
+       
         return spawnedEnemy;
     }
-
+    
 }

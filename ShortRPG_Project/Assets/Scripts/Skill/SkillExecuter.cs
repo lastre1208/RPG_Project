@@ -6,11 +6,11 @@ public class SkillExecuter : MonoBehaviour
    
    
 
-    public void ExecuteSkill(SkillData skill,CommonStatus user ,CommonStatus target)
+    public bool ExecuteSkill(SkillData skill,CommonStatus user ,CommonStatus target)
     {
         ICommand command = null;
 
-        if (skill == null) return ;
+        if (skill == null) return false;
         switch (skill.skillType)
         {
             case SkillType.Attack:
@@ -51,10 +51,10 @@ public class SkillExecuter : MonoBehaviour
 
             };
 
-            command.Execute(context);
+           return command.Execute(context);
 
         }
-
+        return false;
 
     }
 

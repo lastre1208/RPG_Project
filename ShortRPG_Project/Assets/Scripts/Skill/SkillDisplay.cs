@@ -8,53 +8,98 @@ public class SkillDisplay : MonoBehaviour
 {
     [SerializeField] List<TMP_Text> skillTexts;
     [SerializeField] List<Button> skillButtons;
+    [SerializeField]TMP_Text skillDiscriptionText;
+    [SerializeField]TMP_Text skillCountText;
     [SerializeField] PlayerStatus player;
     [SerializeField]PlayerSPDisplay playerSPDisplay;
     [SerializeField]SelectSkill select;
-
-    public void Awake()
+    [SerializeField] Image shotImage;
+    [SerializeField] float blinkSpeed;
+    Color defaultShotImageColor;
+    float alpha = 1.0f;
+    public void Start()
     {
-        //select = GetComponent<SelectSkill>();
+        defaultShotImageColor = shotImage.color;
     }
 
-
-    public void SetSkills(List<SkillData> skills, int index)
+    public void Update()
     {
-        for (int i = 0; i < skillButtons.Count; i++)
+        if (player.skillCount == 0)
         {
-            Debug.Log("kakaka");
-            int localIdx = i; // クロージャ対策
-            skillButtons[i].onClick.RemoveAllListeners();
-            skillButtons[i].onClick.AddListener(() =>select.OnSkillButtonClicked(localIdx));
-            skillButtons[i].onClick.AddListener(() => playerSPDisplay.DelayDamage());
+            alpha = Mathf.PingPong(Time.time * blinkSpeed, 1);
+            shotImage.color=new Color(shotImage.color.r,shotImage.color.g,shotImage.color.b,alpha);
         }
+        else
+        {
+            shotImage.color = defaultShotImageColor;
+        }
+    }
+    public void ShowDiscription(int index)
+    {
+        if (player.status.skillData.Count>=index+1)
+        skillDiscriptionText.text = player.status.skillData[index].skillDescription;
+    
+    }
 
+    public void RemoveDiscription()
+    {
+        if (player.skillCount > 0)
+        {
+            skillDiscriptionText.text = "スキルを選択してください";
+        }
+        else
+        {
+            skillDiscriptionText.text = "SHOT!!!";
+        }
+    }
+
+    public void SetSkills(List<SkillData> skills)
+    {
+       skillCountText.text="残り"+player.skillCount.ToString()+"回";
+        var count= skills.Count;
         for (int i = 0; i < skillTexts.Count; i++)
 
         {
-            int idx = ((index + i + skills.Count) - 1) % skills.Count;
 
-            if (skills.Count > 0)
+
+            if (i <= count - 1)
 
             {
-
-                skillTexts[i].text = " " + skills[idx].skillName + " Cost:" + skills[idx].skillCost.ToString() + " " + skills[idx].skillDescription;
+              
+                skillTexts[i].text = " " + skills[i].skillName + " 消費SP:" + skills[i].skillCost.ToString();
                 skillTexts[i].transform.parent.gameObject.SetActive(true);
 
 
+                var localIndex = i;//クロージャ対策
+                skillButtons[i].onClick.RemoveAllListeners();
+                skillButtons[i].onClick.AddListener(() => select.OnSkillButtonClicked(localIndex));
+                skillButtons[i].onClick.AddListener(() => playerSPDisplay.DelayDamage());
+                EnableCheck(skills[i], skillButtons[i]);
 
 
             }
             else//スキルが2個以下の場合。
             {
-                skillTexts[i].text = "";
+                skillTexts[i].text = "None";
+                EnableCheck(null, skillButtons[i]);
 
-                skillTexts[i].transform.parent.gameObject.SetActive(false);
 
             }
         }
 
         
     }
-   
+   public void EnableCheck(SkillData skill,Button button)//スキルが使用可能かどうかのチェック
+    {
+       if(skill==null||skill.skillCost>player.status.currentSP||player.skillCount<=0)
+        {
+            button.interactable = false;
+        }
+        else
+        {
+            button.interactable = true;
+        }
+
+
+    }
 }

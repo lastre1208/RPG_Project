@@ -8,7 +8,7 @@ public class SelectSkill : MonoBehaviour
     [SerializeField] SkillDisplay skillDisplay;
     [SerializeField] GameObject selectUI;
     PlayerStatus player;
-    int currentIndex = 0;
+   // int currentIndex = 0;
     List<SkillData> skills;
     public void Start()
     {
@@ -16,51 +16,64 @@ public class SelectSkill : MonoBehaviour
         selectUI.SetActive(false);
     }
 
-    //public void OnSelectSkillButton()
-    //{
-
-    //}
+  
     public void OnSkillButtonClicked(int btnIdx)
     {
-        int selectedSkillIndex = (currentIndex + btnIdx - 1 + skills.Count) % skills.Count;
-        var selectedSkill = skills[selectedSkillIndex];
+        //int selectedSkillIndex =btnIdx;
+        var selectedSkill = skills[btnIdx];
 
-        if (selectedSkill.isAllTarget&&selectedSkill.skillType==SkillType.Debuff)//“G‚É‘Î‚µ‚Ä‚Ìó‘ÔˆÙí•t—^‚Í‚±‚¿‚ç
+        if (selectedSkill.isAllTarget && selectedSkill.skillType == SkillType.Debuff)//“G‚É‘Î‚µ‚Ä‚Ìó‘ÔˆÙí•t—^‚Í‚±‚¿‚ç
         {
-            foreach(var enemy in battleManager.enemies)
+            var anySuccesedSkill = false;
+            foreach (var enemy in battleManager.enemies)
             {
-                skillExecuter.ExecuteSkill(selectedSkill, player.status, enemy.commonStatus);
+                if (skillExecuter.ExecuteSkill(selectedSkill, player.status, enemy.commonStatus))
+                {
+                    anySuccesedSkill = true;
+                }
+
+
+            }
+
+            if (anySuccesedSkill)
+            {
+                player.skillCount -= 1;
             }
         }
         else
         {
-            skillExecuter.ExecuteSkill(selectedSkill, player.status, player.status);
+            if (skillExecuter.ExecuteSkill(selectedSkill, player.status, player.status))
+            {
+                player.skillCount -= 1;
+            }
 
         }
+      
+        StartSelect();//XV
             
     }
     public void StartSelect()
     {
         selectUI.SetActive(true);
-        currentIndex = 0;
+       // currentIndex = 0;
         skills = player.status.skillData;
-        skillDisplay.SetSkills(player.status.skillData, currentIndex);
+        skillDisplay.SetSkills(player.status.skillData);
 
 
     }
-    public void MoveUp()
-    {
-        if (skills.Count == 0 || skills == null) return;
-        currentIndex = (currentIndex - 1 + skills.Count) % skills.Count;
-        skillDisplay.SetSkills(player.status.skillData, currentIndex);
+    //public void MoveUp()
+    //{
+    //    if (skills.Count == 0 || skills == null) return;
+    //    currentIndex = (currentIndex - 1 + skills.Count) % skills.Count;
+    //    skillDisplay.SetSkills(player.status.skillData, currentIndex);
 
-    }
+    //}
 
-    public void MoveDown()
-    {
-        if (skills.Count == 0 || skills == null) return;
-        currentIndex = (currentIndex + 1) % skills.Count;
-        skillDisplay.SetSkills(player.status.skillData, currentIndex);
+    //public void MoveDown()
+    //{
+    //    if (skills.Count == 0 || skills == null) return;
+    //    currentIndex = (currentIndex + 1) % skills.Count;
+    //    skillDisplay.SetSkills(player.status.skillData, currentIndex);
 
-    }
+    //}
 }

@@ -3,6 +3,8 @@ using UnityEngine;
 
 public class Weapon : MonoBehaviour
 {
+   
+    public PlayerStatus player;
     public WeaponData weapon;
     public Sprite icon;
     public string weaponName;
@@ -19,4 +21,16 @@ public class Weapon : MonoBehaviour
         bulletScale = weapon.bulletScale;
 
     }
+
+
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        player.AddHit();
+       
+        player.isHit = true;
+    }
+
+
+
 }

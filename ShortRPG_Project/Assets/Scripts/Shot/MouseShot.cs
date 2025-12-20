@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 public class MoveScope : MonoBehaviour//マウスの位置に照準を移動   
 {
-   
+    [SerializeField] PlayerStatus player;
     [SerializeField]Image scope;//照準の画像
     [SerializeField] GameObject shotEffect;
     [SerializeField]Collider2D scopeCollider;//標準のコライダー
@@ -48,14 +48,23 @@ public class MoveScope : MonoBehaviour//マウスの位置に照準を移動
  
 
         scope.transform.position = new Vector3(mousePos.x, mousePos.y, 0);
-        if (scopeCollider.enabled == true)
+
+        if (scopeCollider.enabled == true)//撃っている間
         {
             countTime+= Time.deltaTime;
-            if (enableTime <countTime)
+            if (enableTime <countTime)//ヒットしていなければヒットカウントリセット
             {
                 scopeCollider.enabled = false;
                 countTime = 0f;
-               
+                if (!player.isHit)
+                {
+                    player.ResetHit();
+
+                }
+
+
+
+                player.isHit = false;
             }
         }
 

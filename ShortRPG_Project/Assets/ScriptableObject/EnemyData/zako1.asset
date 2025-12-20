@@ -10,27 +10,27 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 83e2ffb4f6731484db920a1c273c20b7, type: 3}
-  m_Name: zako
+  m_Name: zako1
   m_EditorClassIdentifier: 
   status:
-    characterImage: {fileID: -1111021167199550667, guid: d745cbf569e1d6247b13d393f131ebcb, type: 3}
+    characterImage: {fileID: -5714690271329579143, guid: 48bf5cb5804429540b5ad0b8cb1f3257, type: 3}
     characterName: Bit=1
     maxHP: 100
     currentHP: 100
     maxSP: 0
     currentSP: 0
-    attackPower: 200
-    defensePower: 0
+    attackPower: 110
+    defensePower: 90
     damageRatio: 1
     skillData:
     - {fileID: 11400000, guid: a084cafde9587e24592227bf057c5ffa, type: 2}
     buffs: []
     debuffs: []
   ID: 0
-  exp: 0
+  exp: 3
   speed: 0
   intelligence: 0
   takedamageRatio: 1
-  decayDamageRatioLimit: 0.5
+  decayDamageRatioLimit: 0.1
   easydecayDamage: 100
-  recoverDamageRatio: 0.1
+  recoverDamageRatio: 0.5

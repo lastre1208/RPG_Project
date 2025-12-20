@@ -14,19 +14,30 @@ public enum BattleState
 
 public class BattleManager : MonoBehaviour//戦闘の一連の流れを管理するクラス
 {
-  
-    
+
+    public WinDisplay win;
     public BattleState state=BattleState.START;
     public UIManager manager;
     public SkillExecuter skill;
     public List<Enemy> enemies = new List<Enemy>();//敵のステータス。エンカウント時に読み込む。
     public PlayerStatus player;//プレイヤーのステータス。
   public EncountManager encountManager;
+    public CustomManager customManager;
+    public HitDisplay hitDisplay;
+    public bool isBattle=true;
+    private int level = 0;
+    public CustomRank rank;
+   
 
-    private int Level = 0;
+    public int Level
+    {
 
+        get { return level; }
+        set { level = value; }
+    }
     private void Update()
     {
+        if (isBattle)
         switch (state)//START→STARTTURN→PLAYER(敵全滅でWONへ移行)→ENEMY(プレイヤー死亡でLOSTへ移行)→END→STARTTURNへ
         {
             case BattleState.START:
@@ -50,13 +61,17 @@ public class BattleManager : MonoBehaviour//戦闘の一連の流れを管理するクラス
             case BattleState.STARTTURN://ターンのはじめ
                 {
                     EnemySetUp();
+                    player.skillCount = 3;
+                    player.ResetHit();
+                    manager.EnableBattleUI();
+                    
                     SetTurn(BattleState.PLAYERTURN);
 
                     break;
                 }
             case BattleState.ENDTURN://ターンの終わり
                 {
-
+                    player.status.SPHeal(player.recoverSp);
                     player.status.UpdateBuffsPerTurn();
                     foreach (Enemy enemy in enemies)
                     {
@@ -69,6 +84,14 @@ public class BattleManager : MonoBehaviour//戦闘の一連の流れを管理するクラス
 
             case BattleState.WON:
                 {
+                       
+                        StartCoroutine(win.WinCoroutine());
+                       
+                        GetSkillPoints();
+                        player.ReturnDefault(player);
+                        hitDisplay.StopHit();
+                        customManager.StartCustom();
+                        isBattle = false;
                     break;
                 }
             case BattleState.LOST:
@@ -80,13 +103,22 @@ public class BattleManager : MonoBehaviour//戦闘の一連の流れを管理するクラス
     }
     public void EncounterEnemy()//戦闘開始時に呼ぶ。
     {
-      enemies= encountManager.EncountEnemy(Level);
+      enemies= encountManager.EncountEnemy(Level,rank);
         SetTurn(BattleState.START);
+    }
+
+    public void SetBattle()
+    {
+        isBattle = true;
+        SetTurn(BattleState.START);
+           
+
     }
 
     public void StartBatlle()
     {
         EncounterEnemy();
+        player.SetDefault(player.status);
         Debug.Log("戦闘開始");
         foreach (Enemy enemy in enemies)
         {
@@ -103,9 +135,10 @@ public class BattleManager : MonoBehaviour//戦闘の一連の流れを管理するクラス
 
     public void PlayerTurn()
     {
-
-      //  Debug.Log("プレイヤーのターン");
        
+
+        //  Debug.Log("プレイヤーのターン");
+
     }
    
  public void EnemySetUp()//発動するスキルの選択とダメージ減衰率の回復
@@ -166,12 +199,10 @@ public class BattleManager : MonoBehaviour//戦闘の一連の流れを管理するクラス
     }
    public void ExecuteAction()//行動実行。プレイヤー→敵→ターン更新の順番で処理される。
     {
-        if (CheckBattleEnd())
-        {
-            EndBattle();
-
-        }
-        else if(state==BattleState.PLAYERTURN)
+       
+      JudgeEnd();
+        
+        if(state==BattleState.PLAYERTURN)
         {
            
             SetTurn(BattleState.ENEMYTURN);
@@ -186,11 +217,20 @@ public class BattleManager : MonoBehaviour//戦闘の一連の流れを管理するクラス
         }
     }
 
+    public void JudgeEnd()
+    {
+        if (CheckBattleEnd())
+        {
+            EndBattle();
+
+        }
+    }
     public void EndBattle()
     {
         Debug.Log("戦闘終了");
+        // StopAllCoroutines();
         manager.DisableBattleUI();
-    
+
     }
     public void SetTurn(BattleState state)
     {
@@ -231,5 +271,18 @@ public class BattleManager : MonoBehaviour//戦闘の一連の流れを管理するクラス
             }
         }
         return count == enemies.Count;
+    }
+    public void GetSkillPoints()
+    {
+
+        foreach(Enemy status in enemies)
+        {
+            player.skillPoints += status.exp;
+
+        }
+
+        player.skillPoints += player.hitCount;
+
+        player.skillPoints -= player.maxHitCount/5;
     }
 }

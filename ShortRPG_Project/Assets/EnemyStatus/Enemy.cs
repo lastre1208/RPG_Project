@@ -68,6 +68,7 @@ public class Enemy : MonoBehaviour, ICharacterSet, IBuffEffect, IDebuffEffect
         get { return decayDamage; }
     }
 
+    BattleManager battleManager;
 
     private void Update()
     {
@@ -95,6 +96,7 @@ public class Enemy : MonoBehaviour, ICharacterSet, IBuffEffect, IDebuffEffect
         characterImage = this.GetComponent<SpriteRenderer>();
         characterImage.sprite = status.status.characterImage;
 
+        battleManager = GameObject.FindWithTag("BattleManager").GetComponent<BattleManager>();
 
         polygonCollider = this.GetComponent<PolygonCollider2D>();
         ResetPolygonShape(polygonCollider, characterImage);
@@ -169,15 +171,14 @@ public class Enemy : MonoBehaviour, ICharacterSet, IBuffEffect, IDebuffEffect
 
         foreach (var buff in buffs)
         {
+            var multiple = status.status.GetMultiplier(buff.level, false);
             switch (buff.status)
             {
                 case ModifyStatus.Power:
-                    commonStatus.attackPower *= buff.ratio;
-                    Mathf.Ceil(commonStatus.attackPower);
+                    commonStatus.attackPower = Mathf.RoundToInt(commonStatus.attackPower * multiple);
                     break;
                 case ModifyStatus.Defence:
-                    commonStatus.defensePower *= buff.ratio;
-                    Mathf.Ceil(commonStatus.defensePower);
+                    commonStatus.defensePower = Mathf.RoundToInt(commonStatus.defensePower * multiple);
                     break;
 
                     // •K—v‚É‰ž‚¶‚Ä’Ç‰Á
@@ -233,13 +234,26 @@ public class Enemy : MonoBehaviour, ICharacterSet, IBuffEffect, IDebuffEffect
         if (collision.gameObject.CompareTag("PlayerAttack") && !commonStatus.IsDead())
         {
             countTime = 0;
-            var damage = collision.gameObject.GetComponent<Weapon>().attackPower + (int)player.status.attackPower - (int)commonStatus.defensePower;
-            commonStatus.damageData.hitPosition=collision.gameObject.transform.position;
-            decayDamage.DacayDamage(this,damage);
+
+            var attack = collision.gameObject.GetComponent<Weapon>().attackPower + (int)player.status.attackPower;
+
+            var damage =   status.status.CalculationDamage(attack,status.status.defensePower);
+            commonStatus.damageData.hitPosition = collision.gameObject.transform.position;
+            decayDamage.DacayDamage(this, damage);
             commonStatus.TakeDamage(damage);
 
             isDamage = true;
+
+
+            if (commonStatus.IsDead())
+            {
+
+               battleManager.JudgeEnd();
+               
+            }
         }
+
+
 
     }
 }

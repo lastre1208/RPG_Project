@@ -2,11 +2,11 @@ using UnityEngine;
 
 public class DebuffCommand :ICommand
 {
-    public void Execute(ActionContext action)
+    public bool Execute(ActionContext action)
     {
         var debuffSkill=action.skill as DebuffSkill;
 
-        if (debuffSkill == null) return;
+        if (debuffSkill == null) return false;
 
         var user = action.user;
 
@@ -16,7 +16,7 @@ public class DebuffCommand :ICommand
         if (user.currentSP < debuffSkill.skillCost)
         {
             Debug.Log("Sp不足！！！");
-            return;
+            return false;
         }
         var random = Random.Range(0, 100);
         var isHit = debuffSkill.hitRate >= random;
@@ -54,6 +54,8 @@ public class DebuffCommand :ICommand
             Debug.Log("ミス！");
         }
         user.currentSP -= debuffSkill.skillCost;
+
+        return true;
 
     }
 }

@@ -15,6 +15,7 @@ public class DefaultPlayerStatus
     public float Scale;
     public float Interval;
     public float Time;
+    public int skillCount;
 }
 
 [System.Serializable]
@@ -23,18 +24,30 @@ public class PlayerStatus :MonoBehaviour, ICharacterSet,IBuffEffect,IDebuffEffec
     public CommonStatus status;
    
     public float shotTime;
-    public float recoverSp;
+    public int recoverSp;
     public float intervalRatio=1f;
     public float bulletScale;//弾の大きさ倍率
     public int exp;
     public int nextExp;
-    public int level=1; 
+    public int level=1;
+
+    public int skillPoints=0;
+    public int skillCount = 3;
     public Weapon equippedWeapon;
     public List<Weapon> havedWeapon;
     public int hitCount=0;
     public int maxHitCount=0;
+
+    public bool isHit = false;
+
+
+    public event Action hitEvent;
     private DefaultPlayerStatus Default=new ();
-   
+   public DefaultPlayerStatus DefaultPlayerStatus
+    {
+        get {  return Default; }
+        set { Default = value; }
+    }
 
 
     public void SetDefault(CommonStatus common)
@@ -43,15 +56,22 @@ public class PlayerStatus :MonoBehaviour, ICharacterSet,IBuffEffect,IDebuffEffec
         common.defensePower = status.defensePower;
         common.maxHP = status.maxHP;
         common.maxSP = status.maxSP;
+        common.currentHP = status.maxHP;
+        common.currentSP = status.maxSP;
         common.damageRatio = status.damageRatio;
 
         Default.Scale = bulletScale;
         Default.Interval = intervalRatio;
         Default.Time = shotTime;
+        Default.skillCount = skillCount;
+      
         Default.CommonStatus = new();
         Default.CommonStatus.attackPower = common.attackPower;
         Default.CommonStatus.defensePower=common.defensePower;
         Default.CommonStatus.damageRatio=common.damageRatio;
+
+        common.buffs.Clear();
+        common.debuffs.Clear();
 
     }
     public void Awake()
@@ -73,7 +93,7 @@ public class PlayerStatus :MonoBehaviour, ICharacterSet,IBuffEffect,IDebuffEffec
         player.shotTime = Default.Time;
         player.bulletScale = Default.Scale;
         player.intervalRatio = Default.Interval;
-       
+     //  player.skillCount = Default.skillCount;
 
     }
     // バフによる補正後のステータスを再計算
@@ -83,23 +103,30 @@ public class PlayerStatus :MonoBehaviour, ICharacterSet,IBuffEffect,IDebuffEffec
         ReturnDefault(this);
         foreach (var buff in buffs)
         {
+            var multiple = status.GetMultiplier(buff.level, false);
+
             switch (buff.status)
             {
+               
+               
                 case ModifyStatus.Power:
-                    status.attackPower *= buff.ratio;
-                    status.attackPower = Mathf.Round(status.attackPower);
+
+                    status.attackPower = Mathf.RoundToInt(status.attackPower *multiple);
+
                     break;
                 case ModifyStatus.Defence:
-                    status.defensePower *= buff.ratio;
-                    status.defensePower = Mathf.Round(status.defensePower);
+                    status.defensePower = Mathf.RoundToInt(status.defensePower * multiple);
+
                     break;
                 case ModifyStatus.Interval:
-                    intervalRatio *= buff.ratio;
+                    multiple=status.GetMultiplier(buff.level, true);
+
+                    intervalRatio *= multiple;
                     intervalRatio = (float)Math.Round(intervalRatio, 2);
                     break;
                 case ModifyStatus.Scale:
 
-                    bulletScale *= buff.ratio;
+                    bulletScale *= multiple;
                     bulletScale = (float)Math.Round(bulletScale, 2);
                     break;
                     // 必要に応じて追加
@@ -141,5 +168,23 @@ public class PlayerStatus :MonoBehaviour, ICharacterSet,IBuffEffect,IDebuffEffec
 
     }
    
+    public void AddHit()
+    {
+       
+        hitCount++;
+        if (maxHitCount < hitCount)
+        {
+            maxHitCount = hitCount;
 
+        } 
+        
+        
+        
+        hitEvent?.Invoke();
+    }
+
+    public void ResetHit()
+    {
+        hitCount = 0;
+    }
 }

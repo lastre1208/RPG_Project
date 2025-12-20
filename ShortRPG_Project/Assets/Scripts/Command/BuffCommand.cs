@@ -1,13 +1,13 @@
 using UnityEngine;
 public class BuffCommand : ICommand
 {
-    public void Execute(ActionContext action)
+    public bool Execute(ActionContext action)
     {
         var buffSkill = action.skill as BuffSkill;
         if (buffSkill == null)
         {
             Debug.LogWarning("スキルの型が不正");
-            return;
+            return false;
         }
 
         // バフ対象（自身 or 味方など）を取得
@@ -16,36 +16,47 @@ public class BuffCommand : ICommand
         if (target == null)
         {
             Debug.LogWarning("バフ対象が未設定です");
-            return;
+            return false;
         }
 
         if (user.currentSP < buffSkill.skillCost)
         {
             Debug.Log("SP不足！！");
-            return;
+            return false;
         }
         // 例: ステータス値にバフを加算（安全のためswitch文で分岐）
-        switch (buffSkill.status)
-        {
-            case ModifyStatus.Power:
-                target.AddBuff(ModifyStatus.Power, buffSkill.modifiRatio, buffSkill.enableTurn);
-                break;
-            case ModifyStatus.Defence:
-                target.AddBuff(ModifyStatus.Defence, buffSkill.modifiRatio, buffSkill.enableTurn);
-                break;
-            case ModifyStatus.Interval:
-                target.AddBuff(ModifyStatus.Interval, buffSkill.modifiRatio, buffSkill.enableTurn);
-                break;
-            case ModifyStatus.Scale:
-                target.AddBuff(ModifyStatus.Scale, buffSkill.modifiRatio,buffSkill.enableTurn);
-                break;
-                case ModifyStatus.Time:
-                target.AddBuff(ModifyStatus.Time, buffSkill.modifiRatio, buffSkill.enableTurn);
-                break;
 
-                // 他のステータスも同様に分岐
+
+        foreach (var skill in buffSkill.Effect)
+        {
+
+            switch (skill.status)
+            {
+                case ModifyStatus.Power:
+                    target.AddBuff(ModifyStatus.Power, skill.level, buffSkill.enableTurn);
+                    break;
+                case ModifyStatus.Defence:
+                    target.AddBuff(ModifyStatus.Defence, skill.level, buffSkill.enableTurn);
+                    break;
+                case ModifyStatus.Interval:
+                    target.AddBuff(ModifyStatus.Interval, skill.level, buffSkill.enableTurn);
+                    break;
+                case ModifyStatus.Scale:
+                    target.AddBuff(ModifyStatus.Scale, skill.level, buffSkill.enableTurn);
+                    break;
+                case ModifyStatus.Time:
+                    target.AddBuff(ModifyStatus.Time, skill.level, buffSkill.enableTurn);
+                    break;
+
+                    // 他のステータスも同様に分岐
+            }
+
+
         }
+      
         user.currentSP -= buffSkill .skillCost;
-        Debug.Log($"[BuffCommand] {target}に{buffSkill.status}バフ（{buffSkill.modifiRatio}、{buffSkill.enableTurn}ターン）付与");
+      //  Debug.Log($"[BuffCommand] {target}に{buffSkill.status}バフ（{buffSkill.modifiRatio}、{buffSkill.enableTurn}ターン）付与");
+
+        return true;
     }
 }

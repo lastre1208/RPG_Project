@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEditor.Timeline.Actions;
 public class AttackCommand : ICommand//UŒ‚ŒnB¡‚Í’ÊíUŒ‚‚Ì‚İB
 {
-   public void Execute( ActionContext action )
+   public bool Execute( ActionContext action )
    {
       AttackSkill skill=action.skill as AttackSkill;
 
@@ -17,6 +17,8 @@ public class AttackCommand : ICommand//UŒ‚ŒnB¡‚Í’ÊíUŒ‚‚Ì‚İB
         {
             Debug.Log(action.target.characterName + "‚Í“|‚ê‚½I");
         }
+
+        return true;
     }
 
 }

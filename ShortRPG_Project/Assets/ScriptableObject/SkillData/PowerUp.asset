@@ -19,5 +19,5 @@ MonoBehaviour:
   isAllTarget: 0
   SkillData: {fileID: 11400000}
   status: 0
-  modifiRatio: 1.1
-  enableTurn: 3
+  modifiRatio: 1.5
+  enableTurn: 1

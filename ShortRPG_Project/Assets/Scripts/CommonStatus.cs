@@ -4,6 +4,7 @@ using System;
 using Unity.Burst.Intrinsics;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Linq;
 
 public class RecoverData
 {
@@ -29,15 +30,15 @@ public interface ITurnEntry
 public class BuffEntry:ITurnEntry
 {
     public ModifyStatus status;
-    public float ratio;
+    public BuffLevel level;
     public int RemainTurn {
         get;set;
     }
 
-    public BuffEntry(ModifyStatus status, float ratio, int remainTurn)
+    public BuffEntry(ModifyStatus status, BuffLevel level, int remainTurn)
     {
         this.status = status;
-        this.ratio = ratio;
+        this.level = level;
         this.RemainTurn = remainTurn;
     }
 }
@@ -74,8 +75,8 @@ public class CommonStatus //共通処理＆ステータス。
     public int currentHP;
     public int maxSP;
     public int currentSP;
-    public float attackPower;
-    public float defensePower;
+    public int attackPower;
+    public int defensePower;
     public float damageRatio = 1.0f;
     public List<SkillData> skillData;//持っているスキルリスト
     public List<BuffEntry> buffs = new List<BuffEntry>();
@@ -87,7 +88,9 @@ public class CommonStatus //共通処理＆ステータス。
     public RecoverData recoverData = new RecoverData();
    public  event Action<DamageData> OnDamage;
     public event Action OnRecover;
+    public event Action OnSPRecover;
     const int PARCENT_CONVERSION = 100;
+    const float PARCENT_BUFFLEVEL = 0.25f;
     public CommonStatus() { }
 
 
@@ -101,12 +104,25 @@ public class CommonStatus //共通処理＆ステータス。
         // ここで初期化
         characterSet?.SetDefault(this);
     }
-    public void AddBuff(ModifyStatus modifyStatus, float ratio, int turn)
+    public void AddBuff(ModifyStatus modifyStatus, BuffLevel level, int turn)
     {
+       var existing=buffs.FirstOrDefault(x => x.status == modifyStatus);
+            if (existing!=null&&existing.RemainTurn>0)
+            {
 
-        buffs.Add(new BuffEntry(modifyStatus, ratio, turn));
-        buffEffect?.ApplyBuffEffect(buffs);
-      
+                existing.level += (int)level;
+            
+                existing.RemainTurn = turn;
+
+            }
+            else
+            {
+                buffs.Add(new BuffEntry(modifyStatus, level, turn));
+            }
+
+
+            buffEffect?.ApplyBuffEffect(buffs);
+        
     }
     public void AddDebuff( EnableState state, int turn)
     {
@@ -182,6 +198,13 @@ public class CommonStatus //共通処理＆ステータス。
         
 
     }
+   
+    public int CalculationDamage(int attack,int defence)
+    {
+
+
+        return attack - defence;
+    }
     public void TakeHeal(int heal)
     {
 
@@ -192,9 +215,35 @@ public class CommonStatus //共通処理＆ステータス。
         }
         OnRecover?.Invoke();
     }
+    public void SPHeal(int heal)
+    {
+
+        currentSP += (maxSP * heal) / PARCENT_CONVERSION;
+        if (currentSP > maxSP)
+        {
+            currentSP = maxSP;
+        }
+        OnSPRecover?.Invoke();
+    }
+
     public bool IsDead()
     {
 
         return currentHP <= 0;
+    }
+    public  float GetMultiplier(BuffLevel level,bool isReverse)
+    {
+        var multi=0f;
+        if (!isReverse)
+        {
+            multi = 1 + ((float)level * PARCENT_BUFFLEVEL);
+        }
+        else
+        {
+            multi = 1 - ((float)level * PARCENT_BUFFLEVEL);
+        }
+
+
+            return multi;
     }
 }

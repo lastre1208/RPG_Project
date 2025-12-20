@@ -6,7 +6,7 @@ using Unity.VisualScripting;
 using System.Collections;
 public class EnemyDisplay : MonoBehaviour
 {
-
+  
     [SerializeField] TMP_Text nameText;
     [SerializeField] GameObject damageText;
     [SerializeField] SpriteRenderer spriteRenderer;
@@ -16,7 +16,7 @@ public class EnemyDisplay : MonoBehaviour
     [SerializeField] Canvas canvas;
     [SerializeField] float damageBlinkTime = 0.05f;
     [SerializeField]Gradient decayGradient = new Gradient();//ダメージが減衰する程色が変わる
-
+    new Collider2D collider;
     DelayBar delay;
     Coroutine damageCoroutine;
     Enemy enemy;
@@ -27,7 +27,9 @@ public class EnemyDisplay : MonoBehaviour
     void Start()
     {
         enemy = this.GetComponent<Enemy>();
+        collider = this.GetComponent<Collider2D>();
         canvas = GameObject.FindWithTag("Canvas").GetComponent<Canvas>();
+       
         nameText.text = enemy.status.status.characterName;
         delay = this.GetComponent<DelayBar>();
         barDisplay.status = enemy.commonStatus;
@@ -49,6 +51,7 @@ public class EnemyDisplay : MonoBehaviour
     {
         bool isDead = enemy.commonStatus.IsDead();
 
+        collider.enabled= !isDead;
         nameText.enabled = !isDead;
         enemyHP_Back.gameObject.SetActive(!isDead);
 

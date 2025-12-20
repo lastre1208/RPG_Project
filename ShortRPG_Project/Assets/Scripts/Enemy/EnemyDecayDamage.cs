@@ -8,7 +8,10 @@ public class EnemyDecayDamage : MonoBehaviour
    public void DacayDamage(Enemy enemy,int damage)//ƒ_ƒ[ƒW”{—¦‚ğŒ¸Š‚³‚¹‚é
     {
         float decayRate = (damage / enemy.easyDecay);
-
+        if (decayRate < 0) { 
+        decayRate = 0;
+        
+        }
         Debug.Log(decayRate);
         enemy.commonStatus.damageRatio -= decayRate;
 

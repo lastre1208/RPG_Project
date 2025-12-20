@@ -1,0 +1,36 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 83e2ffb4f6731484db920a1c273c20b7, type: 3}
+  m_Name: zako4
+  m_EditorClassIdentifier: 
+  status:
+    characterImage: {fileID: -6152923091313296850, guid: cb7d3b9154ff07049b7e2597b51e8ed2, type: 3}
+    characterName: ZED-D
+    maxHP: 250
+    currentHP: 0
+    maxSP: 100
+    currentSP: 0
+    attackPower: 1000
+    defensePower: 0
+    damageRatio: 1.5
+    skillData:
+    - {fileID: 11400000, guid: a084cafde9587e24592227bf057c5ffa, type: 2}
+    buffs: []
+    debuffs: []
+  ID: 0
+  exp: 0
+  speed: 0
+  intelligence: 0
+  takedamageRatio: 1
+  decayDamageRatioLimit: 0.1
+  easydecayDamage: 100
+  recoverDamageRatio: 0.1

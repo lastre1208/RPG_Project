@@ -11,8 +11,8 @@ using System.Collections.Generic;
 public interface ICommand 
 {
   
-    public void Execute(ActionContext action)
+    public bool Execute(ActionContext action)
     {
-       
+        return true;
     }
 }

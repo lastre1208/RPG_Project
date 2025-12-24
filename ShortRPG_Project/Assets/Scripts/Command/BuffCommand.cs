@@ -54,7 +54,7 @@ public class BuffCommand : ICommand
 
         }
       
-        user.currentSP -= buffSkill .skillCost;
+      //  user.currentSP -= buffSkill .skillCost;
       //  Debug.Log($"[BuffCommand] {target}に{buffSkill.status}バフ（{buffSkill.modifiRatio}、{buffSkill.enableTurn}ターン）付与");
 
         return true;

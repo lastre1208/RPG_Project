@@ -13,6 +13,8 @@ public class ShotExecuter : MonoBehaviour
     [SerializeField]BattleManager battleManager;
     [SerializeField] float shotWaitTime;
     [SerializeField] float showShotText;
+    [SerializeField]AudioSource shotAudioSource;
+    [SerializeField] AudioClip shotAudioClip;
     float countEnableTime;
     float countShotTime;
     public void Start()
@@ -28,7 +30,8 @@ public class ShotExecuter : MonoBehaviour
 
     public IEnumerator StartShot(PlayerStatus player )
     {
-      countDownText.enabled=true;
+        shotTime.fillAmount = 1;
+        countDownText.enabled=true;
         for(int i = 3; i > 0; i--)
         {
             float wait = shotWaitTime / 3;
@@ -58,7 +61,7 @@ public class ShotExecuter : MonoBehaviour
                 countShotTime = 0f;
                 Debug.Log("Shot!");
                 moveScope.SwitchScopeCollider(true);
-
+                shotAudioSource.PlayOneShot(shotAudioClip);
                 if (player.status.StateCheck(player.status,EnableState.Panic))
                 {
                     var rand = Random.Range(0.5f,2f);
@@ -78,6 +81,7 @@ public class ShotExecuter : MonoBehaviour
              yield return null;
 
         }
+        shotTime.fillAmount = 0;
         shotGauge.fillAmount = 0;
         countEnableTime = 0;
         countShotTime = 0;

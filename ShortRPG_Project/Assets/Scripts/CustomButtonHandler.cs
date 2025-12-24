@@ -4,7 +4,7 @@ public class CustomButtonHandler : MonoBehaviour
 {
 
     [SerializeField] Weapon playerWeapon;
- 
+    [SerializeField]CustomPatternManager patternManager;
   public  CustomData data;
   public void OnClicked()
     {
@@ -39,6 +39,7 @@ public class CustomButtonHandler : MonoBehaviour
         if (data.getSkill != null)
         {
             playerWeapon.player.status.skillData.Add(data.getSkill);
+            patternManager.Data.Add(data);
         }
     }
 }

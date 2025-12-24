@@ -15,7 +15,7 @@ public class HealCommand : ICommand
         //{
         //    action.target.currentHP = action.target.maxHP;
         //}
-        action.user.currentSP -= healSkill.skillCost;
+      //  action.user.currentSP -= healSkill.skillCost;
         return true;
     }
 }

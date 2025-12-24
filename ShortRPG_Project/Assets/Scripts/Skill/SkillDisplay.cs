@@ -15,8 +15,11 @@ public class SkillDisplay : MonoBehaviour
     [SerializeField]SelectSkill select;
     [SerializeField] Image shotImage;
     [SerializeField] float blinkSpeed;
+   
     Color defaultShotImageColor;
     float alpha = 1.0f;
+    
+  
     public void Start()
     {
         defaultShotImageColor = shotImage.color;
@@ -55,7 +58,9 @@ public class SkillDisplay : MonoBehaviour
 
     public void SetSkills(List<SkillData> skills)
     {
-       skillCountText.text="残り"+player.skillCount.ToString()+"回";
+       
+
+        skillCountText.text="残り"+player.skillCount.ToString()+"回";
         var count= skills.Count;
         for (int i = 0; i < skillTexts.Count; i++)
 
@@ -65,23 +70,36 @@ public class SkillDisplay : MonoBehaviour
             if (i <= count - 1)
 
             {
-              
-                skillTexts[i].text = " " + skills[i].skillName + " 消費SP:" + skills[i].skillCost.ToString();
-                skillTexts[i].transform.parent.gameObject.SetActive(true);
+                SkillData skill = skills[i];
+                int dynamicCost = select.SkillExecuter.SkillUseCount.GetValueOrDefault(skill,0);
+                
+                int useCost =skill.skillCost+dynamicCost*skill.increaseCost;
+                if (dynamicCost != 0)
+                {
+                    skillTexts[i].text = $"<color=black> {skill.skillName}\n消費SP:<color=red>{useCost}</color></color>";
+
+                   // skillTexts[i].text = " " + skill.skillName + "\n 消費SP:" + useCost.ToString();
+                }
+                else
+                {
+                    skillTexts[i].text = " " + skill.skillName + "\n 消費SP:" + useCost.ToString();
+                }
+
+                    //  skillTexts[i].transform.parent.gameObject.SetActive(true);
 
 
-                var localIndex = i;//クロージャ対策
+                    var localIndex = i;//クロージャ対策
                 skillButtons[i].onClick.RemoveAllListeners();
                 skillButtons[i].onClick.AddListener(() => select.OnSkillButtonClicked(localIndex));
                 skillButtons[i].onClick.AddListener(() => playerSPDisplay.DelayDamage());
-                EnableCheck(skills[i], skillButtons[i]);
+                EnableCheck(skills[i], skillButtons[i],useCost);
 
 
             }
             else//スキルが2個以下の場合。
             {
                 skillTexts[i].text = "None";
-                EnableCheck(null, skillButtons[i]);
+                EnableCheck(null, skillButtons[i],0);
 
 
             }
@@ -89,9 +107,9 @@ public class SkillDisplay : MonoBehaviour
 
         
     }
-   public void EnableCheck(SkillData skill,Button button)//スキルが使用可能かどうかのチェック
+   public void EnableCheck(SkillData skill,Button button,int cost)//スキルが使用可能かどうかのチェック
     {
-       if(skill==null||skill.skillCost>player.status.currentSP||player.skillCount<=0)
+       if(skill==null||cost>player.status.currentSP||player.skillCount<=0)
         {
             button.interactable = false;
         }
@@ -102,4 +120,5 @@ public class SkillDisplay : MonoBehaviour
 
 
     }
+  
 }

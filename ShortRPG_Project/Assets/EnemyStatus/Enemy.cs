@@ -28,7 +28,7 @@ public class Enemy : MonoBehaviour, ICharacterSet, IBuffEffect, IDebuffEffect
     public float dacayDamageLimit;
     public float easyDecay;
     public float recoverDamageRate;
-  
+ 
 
     private bool isActive = true;
 
@@ -97,6 +97,7 @@ public class Enemy : MonoBehaviour, ICharacterSet, IBuffEffect, IDebuffEffect
         characterImage.sprite = status.status.characterImage;
 
         battleManager = GameObject.FindWithTag("BattleManager").GetComponent<BattleManager>();
+      
 
         polygonCollider = this.GetComponent<PolygonCollider2D>();
         ResetPolygonShape(polygonCollider, characterImage);
@@ -247,8 +248,11 @@ public class Enemy : MonoBehaviour, ICharacterSet, IBuffEffect, IDebuffEffect
 
             if (commonStatus.IsDead())
             {
+               
+                StartCoroutine(battleManager.productManager.DefeatEnemy());
+               
+                battleManager.JudgeEnd();
 
-               battleManager.JudgeEnd();
                
             }
         }

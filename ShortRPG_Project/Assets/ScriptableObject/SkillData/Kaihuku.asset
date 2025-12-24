@@ -15,6 +15,7 @@ MonoBehaviour:
   skillName: "\u30D2\u30FC\u30EB"
   skillDescription: "HP\u3092\u6700\u5927HP\u306E20%\u56DE\u5FA9"
   skillCost: 5
+  increaseCost: 3
   skillType: 1
   isAllTarget: 0
   skillData: {fileID: 11400000}

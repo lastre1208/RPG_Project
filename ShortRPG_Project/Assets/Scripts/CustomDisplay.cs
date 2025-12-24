@@ -27,7 +27,7 @@ public class CustomDisplay : MonoBehaviour
         foreach (var button in decreaseButtons)
         {
 
-            SkillButtonManager skillButton = button.GetComponent<SkillButtonManager>();
+            StatusButtonManager skillButton = button.GetComponent<StatusButtonManager>();
 
             CustomType type = skillButton.Type;
 
@@ -39,7 +39,7 @@ public class CustomDisplay : MonoBehaviour
         foreach (var button in increaseButtons)
         {
 
-            SkillButtonManager skillButton = button.GetComponent<SkillButtonManager>();
+            StatusButtonManager skillButton = button.GetComponent<StatusButtonManager>();
 
             CustomType type = skillButton.Type;
 

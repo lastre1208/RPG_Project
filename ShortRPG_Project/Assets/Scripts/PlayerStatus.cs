@@ -36,6 +36,7 @@ public class PlayerStatus :MonoBehaviour, ICharacterSet,IBuffEffect,IDebuffEffec
     public Weapon equippedWeapon;
     public List<Weapon> havedWeapon;
     public int hitCount=0;
+    public int hitsumCount=0;
     public int maxHitCount=0;
 
     public bool isHit = false;
@@ -172,6 +173,7 @@ public class PlayerStatus :MonoBehaviour, ICharacterSet,IBuffEffect,IDebuffEffec
     {
        
         hitCount++;
+        hitsumCount++;
         if (maxHitCount < hitCount)
         {
             maxHitCount = hitCount;

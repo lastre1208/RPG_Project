@@ -5,6 +5,7 @@ public class SelectSkill : MonoBehaviour
 {
     [SerializeField]BattleManager battleManager;
     [SerializeField] SkillExecuter skillExecuter;
+    public SkillExecuter SkillExecuter { get { return skillExecuter; } }
     [SerializeField] SkillDisplay skillDisplay;
     [SerializeField] GameObject selectUI;
     PlayerStatus player;
@@ -21,7 +22,7 @@ public class SelectSkill : MonoBehaviour
     {
         //int selectedSkillIndex =btnIdx;
         var selectedSkill = skills[btnIdx];
-
+     
         if (selectedSkill.isAllTarget && selectedSkill.skillType == SkillType.Debuff)//ìGÇ…ëŒÇµÇƒÇÃèÛë‘àŸèÌïtó^ÇÕÇ±ÇøÇÁ
         {
             var anySuccesedSkill = false;
@@ -38,17 +39,19 @@ public class SelectSkill : MonoBehaviour
             if (anySuccesedSkill)
             {
                 player.skillCount -= 1;
+                skillExecuter.OnSkillUsed(selectedSkill);
             }
         }
         else
         {
             if (skillExecuter.ExecuteSkill(selectedSkill, player.status, player.status))
             {
-                player.skillCount -= 1;
+                player.skillCount -= 1; 
+                skillExecuter.OnSkillUsed(selectedSkill);
             }
 
         }
-      
+        
         StartSelect();//çXêV
             
     }

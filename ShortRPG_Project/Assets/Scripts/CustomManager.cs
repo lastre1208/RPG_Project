@@ -7,6 +7,20 @@ public class CustomManager : MonoBehaviour//戦闘終了後に呼ぶ。強化フェーズ。
 {
     [SerializeField] GameObject CustomUI;
     [SerializeField]CustomSelectManager customSelectManager;
+
+
+    public AudioSource customAudioSource;
+    public AudioClip customClip;
+    [SerializeField]float initialDelay=1.0f;
+    public float InitialDelay
+    {
+        get { return initialDelay; } 
+    }
+    [SerializeField]float repeatRate=1.0f;
+    public  float RepeatRate
+    {
+        get { return repeatRate; }
+    }
     public PlayerStatus player;
 
 

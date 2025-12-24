@@ -117,9 +117,9 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingLayerID: -678649733
+  m_SortingLayer: -1
+  m_SortingOrder: 100
   m_Sprite: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -393,9 +393,9 @@ MeshRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingLayerID: -678649733
+  m_SortingLayer: -1
+  m_SortingOrder: 100
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!114 &3343622940967267207
 MonoBehaviour:
@@ -517,7 +517,7 @@ GameObject:
   - component: {fileID: 1496201371819228026}
   - component: {fileID: 775818549372672076}
   - component: {fileID: 4419816391297420332}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: HPBar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -593,7 +593,7 @@ GameObject:
   - component: {fileID: 8775063988850827611}
   - component: {fileID: 5297454137033243326}
   - component: {fileID: 3467569513082846008}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -641,7 +641,7 @@ Canvas:
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_TargetDisplay: 0
 --- !u!114 &5297454137033243326
 MonoBehaviour:
@@ -694,7 +694,7 @@ GameObject:
   - component: {fileID: 201629348955277192}
   - component: {fileID: 6985608091925529385}
   - component: {fileID: 4276852137785628472}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: Text (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -830,7 +830,7 @@ GameObject:
   - component: {fileID: 1956488133821545193}
   - component: {fileID: 5994288986200615989}
   - component: {fileID: 5382299898357209840}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: 'DamageBar '
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -905,7 +905,7 @@ GameObject:
   - component: {fileID: 3561886251283069869}
   - component: {fileID: 3696414103761194154}
   - component: {fileID: 4514476647708307133}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: ActionIcon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -981,7 +981,7 @@ GameObject:
   - component: {fileID: 5087442387489931684}
   - component: {fileID: 7751755348091234457}
   - component: {fileID: 3707633454965377104}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: 'RecoverBar '
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1056,7 +1056,7 @@ GameObject:
   - component: {fileID: 8580557924708718801}
   - component: {fileID: 5007152181338869762}
   - component: {fileID: 1465939657318443411}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: BackGround
   m_TagString: Untagged
   m_Icon: {fileID: 0}

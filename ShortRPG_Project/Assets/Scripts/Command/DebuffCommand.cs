@@ -53,7 +53,7 @@ public class DebuffCommand :ICommand
         {
             Debug.Log("É~ÉXÅI");
         }
-        user.currentSP -= debuffSkill.skillCost;
+      //  user.currentSP -= debuffSkill.skillCost;
 
         return true;
 

@@ -27,7 +27,7 @@ MonoBehaviour:
     buffs: []
     debuffs: []
   ID: 0
-  exp: 0
+  exp: 3
   speed: 0
   intelligence: 0
   takedamageRatio: 1

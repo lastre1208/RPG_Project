@@ -59,6 +59,11 @@ public class CustomPatternManager : MonoBehaviour
     [SerializeField] List<TMP_Text> description_Text;
     [SerializeField] List<TMP_Text> skill_Text;
     HashSet<CustomData> data;
+    public HashSet<CustomData> Data
+    {
+        get { return data; }
+        set { data = value; }
+    }
     private void Start()
     {
          data = new HashSet<CustomData>();
@@ -103,7 +108,7 @@ public class CustomPatternManager : MonoBehaviour
             if (selectableList.Count > i)
             {
 
-                data.Add(selectableList[i]);
+             //   data.Add(selectableList[i]);
 
                 d_text.text = selectableList[i].name + "\n" + selectableList[i].description;
                 s_text.text = "Šl“¾ƒXƒLƒ‹\n" + selectableList[i].getSkill.skillName;
